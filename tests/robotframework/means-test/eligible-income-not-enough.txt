@@ -1,0 +1,81 @@
+*** Settings ***
+Documentation       Basic tests for start pages
+
+Resource            ../global.robot
+Suite Teardown      Close all browsers
+
+
+*** Keywords ***
+
+Submit the form
+    Submit form                css=#content form
+
+
+*** Test Cases ***
+
+Your problem
+    Open Home Page
+    Delete all cookies
+    Go to                      ${CHECKER URL}
+    Element should contain     css=.PageHeader h1       Your problem                Checker starts on correct page
+    Select radio button        your_problem-category    violence
+    Submit the form
+
+Your finances start page
+    Element should contain     css=.PageHeader h1       Your finances               Your finances page contains correct title
+    Submit the form
+
+Your details
+    Element should contain     css=.PageHeader h1                    About you      Your details contains correct title
+    Select radio button        your_details-has_partner              0
+    Select radio button        your_details-has_benefits             0
+    Select radio button        your_details-has_children             0
+    Select radio button        your_details-caring_responsibilities  0
+    Select radio button        your_details-own_property             0
+    Select radio button        your_details-risk_homeless            0
+    Select radio button        your_details-older_than_sixty         0
+    Submit the form
+
+Your finances - property
+    Element should contain     css=.PageHeader h1               Your money          Your finances - property contains correct title
+    Input text                 id_your_savings-bank             0
+    Input text                 id_your_savings-investments      0
+    Input text                 id_your_savings-valuable_items   0
+    Input text                 id_your_savings-money_owed       0
+    Submit the form
+
+Your finances - income
+    Element should contain     css=.PageHeader h1                       Your income         Your finances - income contains correct title
+    Input text                 id_your_income-earnings_0                910.5
+    Input text                 id_your_income-other_income_0            0
+    Input text                 id_your_income-tax_0                     0
+    Input text                 id_your_income-ni_0                      0
+    Input text                 your_income-self_employment_drawings_0   0
+    Input text                 your_income-benefits_0                   0
+    Input text                 your_income-tax_credits_0                0
+    Input text                 your_income-child_benefits_0             0
+    Input text                 your_income-maintenance_received_0       0
+    Input text                 your_income-pension_0                    0
+    Select radio button        your_income-self_employed                0
+    Submit the form
+
+Your finances - expenses
+    Element should contain     css=.PageHeader h1                Your costs                 Your income contains correct title
+    Input text                 id_your_allowances-mortgage_0                        0
+    Input text                 id_your_allowances-rent_0                            400
+    Input text                 id_your_allowances-maintenance_0                     0
+    Input text                 id_your_allowances-childcare_0                       0
+    Input text                 id_your_allowances-criminal_legalaid_contributions   0
+    Submit the form
+
+Result
+    Element should contain     css=.PageHeader h1                       You might be able to get Legal Aid   Result page contains successful title
+    Element should contain     css=#content button[type=submit]         Apply for legal aid                  Result page contains apply button
+    Input text                 css=[name=contact_details-full_name]     Test name
+    Input text                 css=[name=contact_details-postcode]      SW1 1DD
+    Input text                 css=[name=contact_details-street]        Street
+    Input text                 css=[name=contact_details-mobile_phone]  01234567890
+    Submit the form
+
+Confirmation
+    Element should contain     css=.PageHeader p       Your reference number        Confirmation page contains reference number

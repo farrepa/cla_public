@@ -1,0 +1,20 @@
+*** Settings ***
+Documentation       Basic tests for start pages
+
+Resource            ../global.robot
+Suite Teardown      Close all browsers
+
+
+*** Test Cases ***
+
+Start page
+    Open Home Page
+    Element should contain     css=h1                   Do you qualify for legal aid    Contains correct title
+    Page should contain link   css=a[role=button]                                       Contains start button
+    Element text should be     css=a[role=button]       Continue                        Button contains correct text
+    Click link                 css=a[role=button]
+
+Threshold page
+    Element should contain     css=h1                   Can you get legal aid           Contains correct title
+    Page should contain link   css=a[role=button]                                       Contains start button
+    Element text should be     css=a[role=button]       Start                           Button contains correct text
