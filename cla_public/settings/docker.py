@@ -20,9 +20,7 @@ HOST_NAME = os.environ["HOST_NAME"]
 
 BACKEND_BASE_URI = os.environ["BACKEND_BASE_URI"]
 
-ALLOWED_HOSTS = [
-    HOST_NAME
-]
+ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].split(',')
 
 # Allow MOJ_DSD IPS to see TEMPLATE_DEBUG
 INTERNAL_IPS = iptools.IpRangeList(
