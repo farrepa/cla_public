@@ -1,0 +1,71 @@
+*** Settings ***
+Documentation       Basic CLAP test
+
+Resource            ../settings.robot
+Suite Teardown      Close all browsers
+
+
+*** Test Cases ***
+
+Start page
+    Open Home Page
+    Location should be         ${HOME}
+    Title should be            Civil Legal Advice
+    Click link                 css=#start
+
+Problem page
+    Location should be         ${HOME}problem
+    Title should be            What do you need help with? - Civil Legal Advice
+    Select radio button        categories   debt
+    Submit form
+
+About you page
+    Location should be         ${HOME}about
+    Title should be            About you - Civil Legal Advice
+    Select radio button        have_partner         0
+    Select radio button        on_benefits          0
+    Select radio button        have_children        0
+    Select radio button        have_dependants      0
+    Select radio button        own_property         0
+    Select radio button        is_employed          0
+    Select radio button        is_self_employed     0
+    Select radio button        aged_60_or_over      0
+    Select radio button        have_savings         0
+    Select radio button        have_valuables       0
+    Submit form
+
+Income page
+    Location should be         ${HOME}income
+    Title should be            Your money coming in - Civil Legal Advice
+    Input text                 your_income-maintenance-per_interval_value       100
+    Select From List           your_income-maintenance-interval_period          per_month
+    Input text                 your_income-pension-per_interval_value           100
+    Select From List           your_income-pension-interval_period              per_month
+    Input text                 your_income-other_income-per_interval_value      100
+    Select From List           your_income-other_income-interval_period         per_month
+    Submit form
+
+Outgoings page
+    Location should be         ${HOME}outgoings
+    Title should be            Your outgoings - Civil Legal Advice
+    Input text                 rent-per_interval_value                  100
+    Select From List           rent-interval_period                     per_month
+    Input text                 maintenance-per_interval_value           100
+    Select From List           maintenance-interval_period              per_month
+    Input text                 income_contribution                      100
+    Submit form
+
+Result: Eligible page
+    Location should be         ${HOME}result/eligible
+    Title should be            Request a callback - Civil Legal Advice
+    Heading text should be     You might qualify for legal aid
+    Input text                 full_name                                Joe Bloggs
+    Input text                 contact_number                           0207 891 2890
+    Select radio button        safe_to_contact                          SAFE
+    Submit form
+
+Result: Confirmation page
+    Location should be         ${HOME}result/confirmation
+    Title should be            Confirmation - Civil Legal Advice
+    Heading text should be     We will call you back
+    Text should match regex    css=.confirmation-ref-number             ^(\\w{2})-(\\w{4})-(\\w{4})$

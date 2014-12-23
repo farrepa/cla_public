@@ -1,0 +1,25 @@
+*** Settings ***
+Documentation       Basic CLAP test
+
+Resource            ../settings.robot
+Suite Teardown      Close all browsers
+
+
+*** Test Cases ***
+
+Feedback page
+    Open Home Page
+    Go to                      ${HOME}feedback
+    Location should be         ${HOME}feedback
+    Title should be            Your feedback - Civil Legal Advice
+
+Submit feedback
+    Select radio button        feel_about_service       Very satisfied
+    Select radio button        help_filling_in_form     No, I filled in this form myself
+    Input text                 difficulty               I’m a robot
+    Input text                 ideas                    Robot Framework
+    Submit form
+
+Confirmation page
+    Location should be         ${HOME}feedback/confirmation
+    Heading text should be     Thanks for your feedback
