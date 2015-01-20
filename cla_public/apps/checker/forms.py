@@ -41,7 +41,7 @@ class FormSessionDataMixin(object):
 
     @classmethod
     def get_session_data(cls):
-        return session.get_form_data(cls.__name__)
+        return session.get_form_data(cls)
 
     @classmethod
     def get_session_as_api_payload(cls):
@@ -64,6 +64,9 @@ class FormSessionDataMixin(object):
 
 class ProblemForm(ConfigFormMixin, Honeypot, BabelTranslationsFormMixin, Form):
     """Area of law choice"""
+    @classmethod
+    def title(self, s):
+        return _('Your problem')
 
     categories = DescriptionRadioField(
         _(u'What do you need help with?'),
@@ -83,6 +86,10 @@ class ProblemForm(ConfigFormMixin, Honeypot, BabelTranslationsFormMixin, Form):
 
 
 class AboutYouForm(ConfigFormMixin, Honeypot, BabelTranslationsFormMixin, Form):
+    @classmethod
+    def title(self, s):
+        return _('About you')
+
     have_partner = YesNoField(
         _(u'Do you have a partner?'),
         description=(
@@ -229,6 +236,13 @@ class AboutYouForm(ConfigFormMixin, Honeypot, BabelTranslationsFormMixin, Form):
 
 
 class YourBenefitsForm(ConfigFormMixin, Honeypot, BabelTranslationsFormMixin, Form):
+    @classmethod
+    def title(self, s):
+        if s.has_partner:
+            return _('You and your partner’s benefits')
+        else:
+            return _('Your benefits')
+
     benefits = PartnerMultiCheckboxField(
         label=_(u'Are you on any of these benefits?'),
         partner_label=_(u'Are you or your partner on any of these benefits?'),
@@ -331,6 +345,13 @@ def sum_rents(rents):
 
 
 class PropertiesForm(ConfigFormMixin, Honeypot, BabelTranslationsFormMixin, Form, FormSessionDataMixin):
+    @classmethod
+    def title(self, s):
+        if s.has_partner:
+            return _('You and your partner’s property')
+        else:
+            return _('Your property')
+
     properties = PropertyList(
         SetZeroFormField(PropertyForm), min_entries=1, max_entries=3)
 
@@ -372,6 +393,14 @@ class PropertiesForm(ConfigFormMixin, Honeypot, BabelTranslationsFormMixin, Form
 
 
 class SavingsForm(ConfigFormMixin, Honeypot, BabelTranslationsFormMixin, Form, FormSessionDataMixin):
+    @classmethod
+    def title(self, s):
+        if s.has_partner:
+            return _('You and your partner’s savings')
+        else:
+            return _('Your savings')
+
+    title = _('Your savings')
     savings = MoneyField(
         _('Savings'),
         description=_(
@@ -411,6 +440,13 @@ class SavingsForm(ConfigFormMixin, Honeypot, BabelTranslationsFormMixin, Form, F
 
 
 class TaxCreditsForm(ConfigFormMixin, Honeypot, BabelTranslationsFormMixin, Form):
+    @classmethod
+    def title(self, s):
+        if s.has_partner:
+            return _('You and your partner’s benefits and tax credits')
+        else:
+            return _('Your benefits and tax credits')
+
     child_benefit = MoneyIntervalField(
         _(u'Child Benefit'),
         description=_(u"The total amount you get for all your children"),
@@ -544,6 +580,21 @@ class IncomeFieldForm(BabelTranslationsFormMixin, NoCsrfForm, FormSessionDataMix
 
 
 class IncomeForm(ConfigFormMixin, Honeypot, BabelTranslationsFormMixin, Form, FormSessionDataMixin):
+    @classmethod
+    def title(self, s):
+        title = ''
+        if s.has_partner:
+            title = _('You and your partner’s')
+        else:
+            title = _('Your')
+
+        if session.is_employed or session.is_self_employed:
+            title +=  ' ' + _('income and tax')
+        else:
+            title += ' ' + _('money coming in')
+
+        return title
+
     your_income = SetZeroFormField(IncomeFieldForm, label=_(u'Your personal income'))
     partner_income = PassKwargsToFormField(
         IncomeFieldForm,
@@ -568,6 +619,13 @@ class IncomeForm(ConfigFormMixin, Honeypot, BabelTranslationsFormMixin, Form, Fo
 
 
 class OutgoingsForm(ConfigFormMixin, Honeypot, BabelTranslationsFormMixin, Form):
+    @classmethod
+    def title(self, s):
+        if s.has_partner:
+            return _('You and your partner’s outgoings')
+        else:
+            return _('Your outgoings')
+
     rent = PartnerMoneyIntervalField(
         label=_(u'Rent'),
         description=_(u"Money you pay your landlord for rent. Do not include "
@@ -610,3 +668,7 @@ class OutgoingsForm(ConfigFormMixin, Honeypot, BabelTranslationsFormMixin, Form)
                 self.income_contribution.data,
             'childcare': self.childcare.data
         }}}
+
+
+class SummaryForm(Form):
+    pass

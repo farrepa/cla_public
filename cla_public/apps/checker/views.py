@@ -16,7 +16,7 @@ from cla_public.apps.checker.decorators import form_view, \
     redirect_if_no_session, redirect_if_ineligible
 from cla_public.apps.checker.forms import AboutYouForm, YourBenefitsForm, \
     ProblemForm, PropertiesForm, SavingsForm, TaxCreditsForm, OutgoingsForm, \
-    IncomeForm
+    IncomeForm, SummaryForm
 from cla_public.libs.utils import override_locale
 
 
@@ -76,7 +76,7 @@ def benefits(user):
     kwargs = {}
     if user.is_on_passported_benefits:
         kwargs['outcome'] = 'eligible'
-        next_step = '.result'
+        next_step = '.summary'
 
     if user.children_or_tax_credits:
         kwargs = {}
@@ -103,7 +103,7 @@ def property(user):
     kwargs = {}
     if user.is_on_passported_benefits:
         kwargs['outcome'] = 'eligible'
-        next_step = '.result'
+        next_step = '.summary'
 
     if session.children_or_tax_credits:
         kwargs = {}
@@ -125,7 +125,7 @@ def savings(user):
     kwargs = {}
     if user.is_on_passported_benefits:
         kwargs['outcome'] = 'eligible'
-        next_step = '.result'
+        next_step = '.summary'
 
     if user.children_or_tax_credits:
         kwargs = {}
@@ -143,7 +143,7 @@ def benefits_tax_credits(user):
     kwargs = {}
     if user.is_on_passported_benefits:
         kwargs['outcome'] = 'eligible'
-        next_step = '.result'
+        next_step = '.summary'
 
     return redirect(url_for(next_step, **kwargs))
 
@@ -158,8 +158,15 @@ def income(user):
 @checker.route('/outgoings', methods=['GET', 'POST'])
 @redirect_if_no_session()
 @form_view(OutgoingsForm, 'outgoings.html')
-@redirect_if_ineligible()
 def outgoings(user):
+    return redirect(url_for('.summary'))
+
+
+@checker.route('/summary', methods=['GET', 'POST'])
+# @redirect_if_no_session()
+# @redirect_if_ineligible()
+@form_view(SummaryForm, 'summary.html')
+def summary(user):
     return redirect(url_for('.result', outcome='eligible'))
 
 

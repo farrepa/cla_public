@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block inner_content %}
+  <h1>Summary</h1>
+
+  {% for form_name in session.form_order if session.forms[form_name] %}
+    {% set form = session.forms[form_name] %}
+
+    <h2>{{ form.title }}</h2>
+    <pre style="word-break: break-word">
+      {{ form_name }}: {{ session.forms[form_name] }}
+    </pre>
+  {% endfor %}
+{% endblock %}

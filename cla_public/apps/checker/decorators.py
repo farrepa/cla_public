@@ -27,8 +27,7 @@ def form_view(form_class, form_template):
             if current_app.config.get('DEBUG'):
                 override_session_vars()
 
-            form_session_data = session.get_form_data(
-                form_class.__name__)
+            form_session_data = session.get_form_data(form_class)
 
             form = form_class(request.form, **form_session_data)
             if form.is_submitted():
