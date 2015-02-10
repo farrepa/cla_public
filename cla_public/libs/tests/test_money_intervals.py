@@ -1,3 +1,4 @@
+from decimal import Decimal
 import unittest
 
 from cla_public.libs.money_interval import MoneyInterval
@@ -31,6 +32,16 @@ class TestMoneyInterval(unittest.TestCase):
         mint_a = MoneyInterval(1)
         mint_b = MoneyInterval(mint_a)
         self.assertEqual(1, mint_b.amount)
+
+    def test_init_from_float(self):
+        mint = MoneyInterval(10.01)
+        self.assertEqual(1001, mint.amount)
+        self.assertEqual('per_month', mint.interval)
+
+    def test_init_from_decimal(self):
+        mint = MoneyInterval(Decimal('10.01'))
+        self.assertEqual(1001, mint.amount)
+        self.assertEqual('per_month', mint.interval)
 
     def test_init_from_invalid(self):
         with self.assertRaises(ValueError):

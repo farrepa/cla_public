@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from cla_common.money_interval.models import MoneyInterval as MIBase
 
 
@@ -10,19 +12,22 @@ class MoneyInterval(dict):
         }
 
         if len(args) > 0:
-            if isinstance(args[0], MoneyInterval):
-                init_val = args[0]
-            elif isinstance(args[0], dict):
+            value = args[0]
+            if isinstance(value, MoneyInterval):
+                init_val = value
+            elif isinstance(value, dict):
                 init_val.update(
-                    per_interval_value=args[0].get('per_interval_value'),
-                    interval_period=args[0].get('interval_period', 'per_month'))
+                    per_interval_value=value.get('per_interval_value'),
+                    interval_period=value.get('interval_period', 'per_month'))
             else:
+                if isinstance(value, float) or isinstance(value, Decimal):
+                    value = value * 100
                 try:
-                    init_val['per_interval_value'] = int(args[0])
+                    init_val['per_interval_value'] = int(value)
                 except ValueError:
                     raise ValueError(
                         'Invalid value for amount {0} ({1})'.format(
-                            args[0], type(args[0])))
+                            value, type(value)))
 
             if len(args) > 1:
                 if args[1] in MIBase._intervals_dict:
@@ -77,4 +82,4 @@ class MoneyInterval(dict):
 
         multiplier = MIBase._intervals_dict[self.interval]['multiply_factor']
 
-        return MoneyInterval(self.amount * multiplier)
+        return MoneyInterval(int(self.amount * multiplier))
