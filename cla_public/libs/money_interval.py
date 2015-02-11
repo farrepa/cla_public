@@ -1,4 +1,4 @@
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 
 from cla_common.money_interval.models import MoneyInterval as MIBase
 
@@ -6,41 +6,31 @@ from cla_common.money_interval.models import MoneyInterval as MIBase
 class MoneyInterval(dict):
 
     def __init__(self, *args, **kwargs):
-        init_val = {
+        super(MoneyInterval, self).__init__({
             'per_interval_value': None,
             'interval_period': 'per_month'
-        }
+        })
 
         if len(args) > 0:
             value = args[0]
             if isinstance(value, MoneyInterval):
-                init_val = value
+                self.amount = value.amount
+                self.interval = value.interval
             elif isinstance(value, dict):
-                init_val.update(
-                    per_interval_value=value.get('per_interval_value'),
-                    interval_period=value.get('interval_period', 'per_month'))
+                self.amount = value.get('per_interval_value')
+                if 'interval_period' in value:
+                    interval = value.get('interval_period')
+                    if interval:
+                        self.interval = interval
             else:
-                if isinstance(value, float) or isinstance(value, Decimal):
-                    value = value * 100
-                try:
-                    init_val['per_interval_value'] = int(value)
-                except ValueError:
-                    raise ValueError(
-                        'Invalid value for amount {0} ({1})'.format(
-                            value, type(value)))
+                self.amount = value
 
             if len(args) > 1:
-                if args[1] in MIBase._intervals_dict:
-                    init_val['interval_period'] = args[1]
-                else:
-                    raise ValueError(args[1])
+                self.interval = args[1]
 
         else:
-            init_val.update(
-                per_interval_value=kwargs.get('per_interval_value'),
-                interval_period=kwargs.get('interval_period', 'per_month'))
-
-        super(MoneyInterval, self).__init__(init_val)
+            self.amount = kwargs.get('per_interval_value')
+            self.interval = kwargs.get('interval_period', 'per_month')
 
     @property
     def amount(self):
@@ -48,7 +38,32 @@ class MoneyInterval(dict):
 
     @amount.setter
     def amount(self, value):
-        self['per_interval_value'] = value
+        """
+        Assumes integer is amount in pence, float or Decimal is amount in
+        pounds and first 2 decimal places are pence. String is converted to
+        Decimal first.
+        """
+
+        try:
+            if value is None:
+                self['per_interval_value'] = None
+
+            elif isinstance(value, basestring):
+                self.amount = Decimal(value)
+
+            elif isinstance(value, float):
+                self.amount = int(value * 100)
+
+            elif isinstance(value, Decimal):
+                self.amount = int(value * 100)
+
+            else:
+                self['per_interval_value'] = int(value)
+
+        except (InvalidOperation, ValueError):
+            raise ValueError(
+                'Invalid value for amount {0} ({1})'.format(
+                    value, type(value)))
 
     @property
     def interval(self):
@@ -56,7 +71,12 @@ class MoneyInterval(dict):
 
     @interval.setter
     def interval(self, value):
-        self['interval_period'] = value
+        if value is not None:
+            if value in MIBase._intervals_dict:
+                self['interval_period'] = value
+            else:
+                raise ValueError(value)
+
 
     def __add__(self, other):
         if other == 0:
