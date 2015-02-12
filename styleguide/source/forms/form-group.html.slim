@@ -5,3 +5,23 @@ stylesheet: /cla-main
 
 = model '/forms/snippets/form-group.html',
   iframe: true
+  erb:
+    <fieldset class="form-group" id="field-have_dependants">
+      <legend class="fieldset-label" id="field-label-have_dependants">
+        <span>Do you have any dependants aged 16 or over?</span>
+      </legend>
+      <div class="form-row field-help">
+        <span class="field-description">People who you live with and support financially. This could be a young person for whom you get Child Benefit</span>
+      </div>
+      <div class="form-row">
+        <label class="radio-inline" for="have_dependants-0">
+          <input id="have_dependants-0" name="have_dependants" type="radio" value="1">
+          Yes
+        </label>
+        <label class="radio-inline" for="have_dependants-1">
+          <input id="have_dependants-1" name="have_dependants" type="radio" value="0">
+          No
+        </label>
+      </div>
+    </fieldset>
+

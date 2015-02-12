@@ -5,3 +5,11 @@ stylesheet: /cla-main
 
 = model '/alerts/snippets/alert-error.html',
   iframe: true
+  erb:
+    <div class="alert alert-error" role="alert">
+      <span class="icon icon-cross" aria-hidden="true"></span>
+      <div class="alert-message">
+        <p>This form has errors.</p>
+        <p>Please see below for the errors you need to correct.</p>
+      </div>
+    </div>
