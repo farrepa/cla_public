@@ -5,3 +5,16 @@ stylesheet: /cla-main
 
 = model '/forms/snippets/block-label.html',
   iframe: true
+  erb:
+    <dl class="form-group block-label">
+      <dd class="form-row">
+        <label class="form-label" for="categories-10">
+          <input id="categories-10" name="categories" type="radio" value="publiclaw">
+          Public law
+          <div class="field-help">
+            Taking legal action against a public body, like your local council
+          </div>
+        </label>
+      </dd>
+    </dl>
+
