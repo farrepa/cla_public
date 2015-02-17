@@ -1,0 +1,231 @@
+{
+    "category": "debt",
+    "dependants_old": 0,
+    "dependants_young": 0,
+    "on_nass_benefits": false,
+    "on_passported_benefits": false,
+    "partner": {
+        "deductions": {
+            "childcare": {
+                "interval_period": "per_month",
+                "per_interval_value": 0
+            },
+            "criminal_legalaid_contributions": 0,
+            "income_tax": {
+                "interval_period": "per_month",
+                "per_interval_value": 0
+            },
+            "maintenance": {
+                "interval_period": "per_month",
+                "per_interval_value": 0
+            },
+            "mortgage": {
+                "interval_period": "per_month",
+                "per_interval_value": 0
+            },
+            "national_insurance": {
+                "interval_period": "per_month",
+                "per_interval_value": 0
+            },
+            "rent": {
+                "interval_period": "per_month",
+                "per_interval_value": 0
+            }
+        },
+        "income": {
+            "benefits": {
+                "interval_period": "per_month",
+                "per_interval_value": 0
+            },
+            "child_benefits": {
+                "interval_period": "per_month",
+                "per_interval_value": 0
+            },
+            "earnings": {
+                "interval_period": "per_month",
+                "per_interval_value": 0
+            },
+            "maintenance_received": {
+                "interval_period": "per_month",
+                "per_interval_value": 0
+            },
+            "other_income": {
+                "interval_period": "per_month",
+                "per_interval_value": 0
+            },
+            "pension": {
+                "interval_period": "per_month",
+                "per_interval_value": 0
+            },
+            "self_employed": false,
+            "self_employment_drawings": {
+                "interval_period": "per_month",
+                "per_interval_value": 0
+            },
+            "tax_credits": {
+                "interval_period": "per_month",
+                "per_interval_value": 0
+            },
+            "total": 0
+        },
+        "savings": {
+            "asset_balance": 0,
+            "bank_balance": 0,
+            "credit_balance": 0,
+            "investment_balance": 0,
+            "total": 0
+        }
+    },
+    "specific_benefits": {},
+    "yo": {
+        "deductions": {
+            "childcare": {
+                "interval_period": "per_month",
+                "per_interval_value": 0
+            },
+            "criminal_legalaid_contributions": 0,
+            "income_tax": {
+                "interval_period": "per_month",
+                "per_interval_value": 0
+            },
+            "maintenance": {
+                "interval_period": "per_month",
+                "per_interval_value": 0
+            },
+            "mortgage": {
+                "interval_period": "per_month",
+                "per_interval_value": 0
+            },
+            "national_insurance": {
+                "interval_period": "per_month",
+                "per_interval_value": 0
+            },
+            "rent": {
+                "interval_period": "per_month",
+                "per_interval_value": 0
+            }
+        },
+        "income": {
+            "benefits": {
+                "interval_period": "per_month",
+                "per_interval_value": 0
+            },
+            "child_benefits": {
+                "interval_period": "per_month",
+                "per_interval_value": 0
+            },
+            "earnings": {
+                "interval_period": "per_month",
+                "per_interval_value": 0
+            },
+            "maintenance_received": {
+                "interval_period": "per_month",
+                "per_interval_value": 0
+            },
+            "other_income": {
+                "interval_period": "per_month",
+                "per_interval_value": 0
+            },
+            "pension": {
+                "interval_period": "per_month",
+                "per_interval_value": 0
+            },
+            "self_employed": false,
+            "self_employment_drawings": {
+                "interval_period": "per_month",
+                "per_interval_value": 0
+            },
+            "tax_credits": {
+                "interval_period": "per_month",
+                "per_interval_value": 0
+            },
+            "total": 0
+        },
+        "savings": {
+            "asset_balance": 0,
+            "bank_balance": 0,
+            "credit_balance": 0,
+            "investment_balance": 0,
+            "total": 0
+        }
+    }
+}
+
+{'is_you_or_your_partner_over_60': u'1', 'has_partner': u'1', 'property_set':
+[{'disputed': None, 'share': None, 'value': None, 'mortgage_left': None, 'rent':
+{'per_interval_value': 0, 'interval_period': 'per_month'}, 'main': None}],
+'dependants_old': 0, 'partner': {'deductions': {'income_tax':
+{'per_interval_value': None, 'interval_period': None}, 'national_insurance':
+{'per_interval_value': None, 'interval_period': None}}, 'income':
+{'self_employment_drawings': {'per_interval_value': 0, 'interval_period':
+'per_month'}, 'self_employed': u'1', 'earnings': {'per_interval_value': None,
+'interval_period': None}, 'tax_credits': {'per_interval_value': None,
+'interval_period': None}, 'maintenance_received': {'per_interval_value': None,
+'interval_period': None}, 'other_income': {'per_interval_value': 0,
+'interval_period': 'per_month'}, 'pension': {'per_interval_value': None,
+'interval_period': None}}}, 'you': {'deductions': {'income_tax':
+{'per_interval_value': None, 'interval_period': None}, 'mortgage':
+{'per_interval_value': 0, 'interval_period': 'per_month'}, 'childcare':
+{'per_interval_value': None, 'interval_period': None}, 'rent':
+{'per_interval_value': None, 'interval_period': None}, 'maintenance':
+{'per_interval_value': None, 'interval_period': None},
+'criminal_legalaid_contributions': None, 'national_insurance':
+{'per_interval_value': None, 'interval_period': None}}, 'savings':
+{'investment_balance': None, 'asset_balance': 0, 'bank_balance': None},
+'income': {'self_employment_drawings': {'per_interval_value': 0,
+'interval_period': 'per_month'}, 'self_employed': u'0', 'earnings':
+{'per_interval_value': None, 'interval_period': None}, 'tax_credits':
+{'per_interval_value': 0, 'interval_period': 'per_month'},
+'maintenance_received': {'per_interval_value': None, 'interval_period': None},
+'other_income': {'per_interval_value': 0, 'interval_period': 'per_month'},
+'pension': {'per_interval_value': None, 'interval_period': None}}},
+'dependants_young': 1}
+
+{'on_passported_benefits': False, 'specific_benefits': {'pension_credit': False,
+'job_seekers_allowance': False, 'employment_support': False, 'universal_credit':
+False, 'income_support': False}}
+
+{'property_set': [{'disputed': u'0', 'share': 100, 'value': 1000000,
+'mortgage_left': 900000, 'rent': {'per_interval_value': 1200, 'interval_period':
+u'per_month'}, 'main': u'1'}, {'disputed': u'0', 'share': 100, 'value': 1000000,
+'mortgage_left': 900000, 'rent': {'per_interval_value': 1000, 'interval_period':
+u'per_month'}, 'main': u'0'}], 'you': {'deductions': {'mortgage':
+{'per_interval_value': 18000, 'interval_period': 'per_month'}}, 'income':
+{'other_income': {'per_interval_value': 2200, 'interval_period': 'per_month'}}}}
+
+{'you': {'savings': {'asset_balance': 0, 'investment_balance': 2000,
+'bank_balance': 10000}}}
+
+{'you': {'income': {'tax_credits': {'per_interval_value': 1000,
+'interval_period': u'per_week'}, 'benefits': {'per_interval_value': 1200,
+'interval_period': u'per_week'}, 'child_benefits': {'per_interval_value': 2000,
+'interval_period': u'per_week'}}}, 'on_nass_benefits': False}
+
+{'partner': {'deductions': {'income_tax': {'per_interval_value': 200,
+'interval_period': u'per_week'}, 'national_insurance': {'per_interval_value':
+300, 'interval_period': u'per_week'}}, 'income': {'self_employment_drawings':
+{'per_interval_value': 0, 'interval_period': 'per_month'},
+'maintenance_received': {'per_interval_value': 500, 'interval_period':
+u'per_week'}, 'tax_credits': {'per_interval_value': 400, 'interval_period':
+u'per_week'}, 'pension': {'per_interval_value': 600, 'interval_period':
+u'per_week'}, 'other_income': {'per_interval_value': 3033.333333333333,
+'interval_period': 'per_month'}, 'earnings': {'per_interval_value': 100,
+'interval_period': u'per_week'}}}, 'you': {'deductions': {'income_tax':
+{'per_interval_value': 100, 'interval_period': u'per_week'},
+'national_insurance': {'per_interval_value': 200, 'interval_period':
+u'per_week'}}, 'income': {'self_employment_drawings': {'per_interval_value': 0,
+'interval_period': 'per_month'}, 'maintenance_received': {'per_interval_value':
+400, 'interval_period': u'per_week'}, 'tax_credits': {'per_interval_value':
+1300.0, 'interval_period': 'per_month'}, 'pension': {'per_interval_value': 500,
+'interval_period': u'per_week'}, 'other_income': {'per_interval_value': 2600.0,
+'interval_period': 'per_month'}, 'earnings': {'per_interval_value': 2000,
+'interval_period': u'per_week'}}}}
+
+{'you': {'deductions': {'criminal_legalaid_contributions': 300, 'childcare':
+{'per_interval_value': 400, 'interval_period': u'per_week'}, 'rent':
+{'per_interval_value': 100, 'interval_period': u'per_week'}, 'maintenance':
+{'per_interval_value': 200, 'interval_period': u'per_week'}}}}
+
+{'notes': u'User selected category: debt\n\nOther benefits:\n - fostering\n -
+housing\n\nUser problem:\ndsadsa'}
+
