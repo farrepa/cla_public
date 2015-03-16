@@ -1,4 +1,21 @@
 GIT
+  remote: git://github.com/chriseppstein/compass.git
+  revision: 07ad85dc141ff1e494c6163a31fc3b491ed00ab9
+  specs:
+    compass (1.1.0.alpha.3)
+      chunky_png (~> 1.2)
+      compass-core (~> 1.1.0.alpha.3)
+      compass-import-once (~> 1.0.5)
+      rb-fsevent (>= 0.9.3)
+      rb-inotify (>= 0.9)
+      sass (>= 3.3.13, < 3.5)
+    compass-core (1.1.0.alpha.3)
+      multi_json (~> 1.0)
+      sass (>= 3.3.0, < 3.5)
+    compass-import-once (1.0.5)
+      sass (>= 3.2, < 3.5)
+
+GIT
   remote: git://github.com/middleman/middleman-syntax.git
   revision: d1a49ee30f9a2ef939a00b78f3b38cca6c5bcc0c
   specs:
@@ -41,24 +58,12 @@ GEM
       sassy-maps (< 1.0.0)
     celluloid (0.16.0)
       timers (~> 4.0.0)
-    chunky_png (1.3.3)
+    chunky_png (1.3.4)
     coderay (1.1.0)
     coffee-script (2.3.0)
       coffee-script-source
       execjs
     coffee-script-source (1.9.0)
-    compass (1.0.3)
-      chunky_png (~> 1.2)
-      compass-core (~> 1.0.2)
-      compass-import-once (~> 1.0.5)
-      rb-fsevent (>= 0.9.3)
-      rb-inotify (>= 0.9)
-      sass (>= 3.3.13, < 3.5)
-    compass-core (1.0.3)
-      multi_json (~> 1.0)
-      sass (>= 3.3.0, < 3.5)
-    compass-import-once (1.0.5)
-      sass (>= 3.2, < 3.5)
     em-websocket (0.5.1)
       eventmachine (>= 0.12.9)
       http_parser.rb (~> 0.6.0)
@@ -192,8 +197,8 @@ PLATFORMS
 DEPENDENCIES
   bourbon
   breakpoint
-  compass
-  middleman
+  compass!
+  middleman (~> 3.3)
   middleman-deploy
   middleman-livereload!
   middleman-pry
@@ -202,7 +207,7 @@ DEPENDENCIES
   oj
   rack-livereload!
   rest_client
-  sass
+  sass (~> 3.4)
   sass-css-importer
   sculptor (= 0.0.11.1)
   slim

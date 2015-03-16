@@ -20,12 +20,19 @@ page '*.json', :layout => false
 # end
 
 ready do
-  # Create mappings for isolated component pages (iframe embeddable)
-  resources_for('/', exclude_indexes: true, allow_hidden: true).each do |r|
-    proxy "#{r.path.sub(r.ext, '')}-isolated.html", r.path, layout: 'isolated'
+  # Prerender resources to populate models
+  resources = resources_for('/', exclude_indexes: true, allow_hidden: true).each do |r|
+    r.render
   end
-  resources_for('/', allow_hidden: true).each do |r|
-    proxy "#{r.path.sub(r.ext, '')}/isolated", r.path, layout: 'isolated'
+
+  # Create mappings for isolated component pages (iframe embeddable)
+  resources.each do |r|
+    r.metadata.models.each do |id, model|
+      proxy "#{r.path.sub(r.ext, '')}-#{id}-isolated.html",
+        r.path,
+        layout: 'isolated',
+        id: id
+    end
   end
 end
 
