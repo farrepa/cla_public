@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% set title = _('Your area of law') %}
+{% block page_title %}{{ title }} - {{ super() }}{% endblock %}
+
+{% block inner_content %}
+  <p>
+    We think your area of law is: {{ session['category'] }}
+  </p>
+{% endblock %}
