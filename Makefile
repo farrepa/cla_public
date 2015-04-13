@@ -31,3 +31,6 @@ test-all:
 # running tests on Browserstack - set credentials in env vars BS_USER and BS_PASS
 test-bs:
 	./nightwatch -c tests/nightwatch/browserstack-integration.conf.js -s legacy ${browserstack_browser} ${specific_test}
+
+test-galen:
+	galen test tests/galen/problem-page.test.js --htmlreport tests/galen/reports

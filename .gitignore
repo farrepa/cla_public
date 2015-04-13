@@ -30,6 +30,7 @@ nightwatch.xml
 *.log
 
 tests/reports/nightwatch/*
+tests/galen/reports/
 
 # Translations
 *.mo
