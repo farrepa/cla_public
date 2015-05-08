@@ -200,7 +200,7 @@ class CheckerWizard(AllowSessionOverride, FormWizard):
             return False
 
         if not for_review_page \
-                and step.name not in ('problem', 'about', 'benefits') \
+                and step.name not in ('about', 'benefits') \
                 and session.checker.ineligible:
             return True
 
@@ -217,7 +217,7 @@ class CheckerWizard(AllowSessionOverride, FormWizard):
             return not session.checker.children_or_tax_credits
 
         if session.checker.is_on_passported_benefits \
-                and step.name not in ('problem', 'about', 'benefits'):
+                and step.name not in ('about', 'benefits'):
             return True
 
         return False
@@ -236,9 +236,7 @@ class FaceToFace(views.MethodView, object):
         form = FindLegalAdviserForm(request.args, csrf_enabled=False)
         data = handle_find_legal_adviser_form(form, request.args)
 
-        session.checker.update({
-            'ProblemForm': {'categories': request.args.get('category')}
-        })
+        session.checker['category'] = request.args.get('category')
 
         if session.checker.category:
             category_name = session.checker.category_name
@@ -264,9 +262,7 @@ class EligibleNoCallBack(views.MethodView, object):
         data = handle_find_legal_adviser_form(form, request.args)
 
         session.clear_checker()
-        session.checker.update({
-            'ProblemForm': {'categories': request.args.get('category')}
-        })
+        session.checker['category'] = request.args.get('category')
 
         return render_template('checker/result/eligible-no-callback.html',
             data=data, form=form, category_name=session.checker.category_name)
