@@ -176,6 +176,7 @@ class CheckerWizard(AllowSessionOverride, FormWizard):
     def complete(self):
         flash(unicode(END_SERVICE_FLASH_MESSAGE))
 
+        # TODO: Delete Face to Face as it's not needed (handled by scope diag)
         if session.checker.needs_face_to_face:
             return redirect(
                 url_for('.face-to-face', category=session.checker.category)

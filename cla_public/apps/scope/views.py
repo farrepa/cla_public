@@ -5,7 +5,9 @@ from cla_public.apps.scope import scope
 from cla_public.apps.scope.api import diagnosis_api_client as api
 from cla_public.libs.views import RequiresSession
 from flask import views, render_template, current_app, url_for, \
-    redirect, session
+    redirect, session, flash
+
+from cla_public.apps.base.constants import END_SERVICE_FLASH_MESSAGE
 
 
 OUTCOME_URLS = {
@@ -51,6 +53,8 @@ class ScopeDiagnosis(RequiresSession, views.MethodView):
                 outcome_url = '%s/%s' % (
                     outcome_url,
                     session.checker.category_slug)
+            if state in [DIAGNOSIS_SCOPE.INELIGIBLE, DIAGNOSIS_SCOPE.OUTOFSCOPE]:
+                flash(unicode(END_SERVICE_FLASH_MESSAGE))
             return redirect(outcome_url)
 
         def add_link(choice):
