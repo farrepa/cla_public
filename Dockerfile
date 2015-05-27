@@ -1,64 +1,42 @@
 #
-# CLA Dockerfile
-#
-# https://github.com/dockerfile/nginx
+# CLA_PUBLIC Dockerfile all environments
 #
 # Pull base image.
-FROM phusion/baseimage:0.9.11
+FROM phusion/baseimage:0.9.16
 
-MAINTAINER Peter Idah <peter.idah@digital.justice.gov.uk>
+MAINTAINER Stuart Munro <stuart.munro@digital.justice.gov.uk>
 
-# Set correct environment variables.
-ENV HOME /root
-# Use baseimage-docker's init process.
-CMD ["/sbin/my_init"]
+# Runtime User
+RUN useradd -m -d /home/app app
 
 # Set timezone
 RUN echo "Europe/London" > /etc/timezone  &&  dpkg-reconfigure -f noninteractive tzdata
 
 # Dependencies
-RUN DEBIAN_FRONTEND='noninteractive' apt-get update && \
-  apt-get -y --force-yes install apt-utils python-pip \
-  python-dev build-essential git software-properties-common \
-  python-software-properties libpq-dev g++ make libpcre3 libpcre3-dev libffi-dev
+RUN DEBIAN_FRONTEND='noninteractive' \
+  apt-get update && \
+  apt-get -y --force-yes install bash apt-utils build-essential git software-properties-common libpq-dev g++ make libpcre3 libpcre3-dev \
+  libxslt-dev libxml2-dev wget libffi-dev
 
-# Install Nginx.
-RUN DEBIAN_FRONTEND='noninteractive' add-apt-repository ppa:nginx/stable && apt-get update
-RUN DEBIAN_FRONTEND='noninteractive' apt-get -y --force-yes install nginx-full && \
-  chown -R www-data:www-data /var/lib/nginx
+RUN apt-get clean
 
-RUN rm -f /etc/nginx/sites-enabled/default
+# Install latest python
+ADD ./docker/install_python.sh /install_python.sh
+RUN chmod 755 /install_python.sh
+RUN /install_python.sh
 
-#Pip install Python packages
-
-RUN pip install GitPython uwsgi
-
-RUN mkdir -p /var/log/wsgi && chown -R www-data:www-data /var/log/wsgi && chmod -R g+s /var/log/wsgi
-
-ADD ./docker/cla_public.ini /etc/wsgi/conf.d/cla_public.ini
-
-# install service files for runit
-ADD ./docker/uwsgi.service /etc/service/uwsgi/run
-
-# install service files for runit
-ADD ./docker/nginx.service /etc/service/nginx/run
-
-# Define mountable directories.
-VOLUME ["/data", "/var/log/nginx", "/var/log/wsgi", "/var/log/cla_public"]
-
-# Expose ports.
-EXPOSE 80
-
-# APP_HOME
-ENV APP_HOME /home/app/flask
+# Add requirements to docker
+ADD ./requirements/base.txt /requirements.txt
+RUN pip install -r /requirements.txt
 
 # Add project directory to docker
-ADD ./ /home/app/flask
+ADD . /home/app/flask
+RUN  chown -R app: /home/app/flask
 
-# awaiting docker fix
-#WORKDIR /home/app/flask
 
-# PIP INSTALL APPLICATION
-RUN cd /home/app/flask && pip install -r requirements.txt && find . -name '*.pyc' -delete && pybabel compile -d cla_public/translations
-
-ADD ./docker/nginx.conf /etc/nginx/nginx.conf
+# Set correct environment variables.
+ENV HOME /home/app/flask
+WORKDIR /home/app/flask
+ENV APP_HOME /home/app/flask
+USER app
+EXPOSE 8000
