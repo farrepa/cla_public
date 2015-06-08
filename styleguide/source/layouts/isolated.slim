@@ -7,9 +7,12 @@ html
     meta charset='utf-8'
     title = page_title
     meta name='viewport' content='width=device-width'
-    = yield_content :stylesheets
     - if current_model[:stylesheet]
-      = stylesheet_link_tag(current_model[:stylesheet])
+      = include_stylesheets(current_model[:stylesheet])
+    - else
+      = yield_content :stylesheets
+      - if current_resource.metadata.options.iframe
+        = include_stylesheets(current_page.data.stylesheets || current_page.data.stylesheet)
     - if current_resource.data.isolation_styles
       style = current_resource.data.isolation_styles
 

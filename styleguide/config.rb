@@ -13,7 +13,7 @@ page '*.css',   layout: false
 page '*.js',    layout: false
 page '*.json',  layout: false
 
-set :site_title, 'Styleguide'
+set :site_title, 'CLA Styleguide'
 
 ready do
   # Proxy default site index to Glyptotheque index template
@@ -88,6 +88,10 @@ end
 # Sprockets
 ready do
   sprockets.append_path(File.join(root, bowerrc_dir))
+end
+
+compass_config do |config|
+  config.add_import_path("../../cla_public/static-src/stylesheets")
 end
 
 Slim::Engine.disable_option_validator!

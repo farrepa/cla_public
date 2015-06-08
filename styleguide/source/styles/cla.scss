@@ -13,9 +13,5 @@
 @import 'govuk/typography';
 @import 'govuk/utilities';
 
-@import 'govuk/elements';
-
-
-.glypto-container {
-  @include container(960px);
-}
+@import 'scope-diagnosis';
+@import 'forms/field-help';

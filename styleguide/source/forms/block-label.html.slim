@@ -1,10 +1,12 @@
 ---
 title: Block label
+stylesheet: '/assets/styles/app'
+isolation_styles: >
+  body { margin: 5px 10px }
+  .scope-options-list { max-width: 960px }
 ---
 
-= model 'a',
-  stylesheet: '/assets/styles/app',
-  iframe: true
+= model 'a'
   erb:
     <label class="block-label" for="categories-0">
       <input id="categories-0" name="categories" type="radio" value="clinneg">
@@ -14,9 +16,7 @@ title: Block label
       </div>
     </label>
 
-= model 'b',
-  stylesheet: '/assets/styles/app2',
-  iframe: true
+= model 'b'
   erb:
     <label class="block-label" for="categories-0">
       <input id="categories-0" name="categories" type="radio" value="clinneg">
