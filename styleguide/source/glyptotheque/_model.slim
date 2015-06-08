@@ -10,7 +10,7 @@
 article.glypto-model
   .glypto-model-stage
     - if current_model.iframe
-      iframe src="#{url_for(isolated_url)}" height="0" width="100%" frameborder="0" scrolling="no" onload='javascript:resizeIframe(this);'
+      iframe id="iframe-#{id}" src="#{url_for(isolated_url)}" frameborder="0" scrolling="no"
     - else
       figure = current_model.html
 
@@ -20,7 +20,17 @@ article.glypto-model
   - unless locals[:iframe]
     - stylesheets = current_page.metadata.page[:stylesheet] || current_page.metadata.page[:stylesheets] || current_page.data[:stylesheet] || current_page.data[:stylesheets]
     - javascripts = current_page.metadata.page[:javascript] || current_page.metadata.page[:javascripts] || current_page.data[:javascript] || current_page.data[:javascripts]
-    - if stylesheets
-      - content_for :stylesheets, include_stylesheets(stylesheets)
-    - if javascripts
-      - content_for :javascripts, include_javascripts(javascripts)
+
+    - current_js = include_javascripts(javascripts)
+    - included_js = yield_content(:javascripts)
+
+    - current_css = include_stylesheets(stylesheets)
+    - included_css = yield_content(:stylesheets)
+
+    - if current_css
+      - unless (included_css && included_css.match(current_css))
+        - content_for :stylesheets, include_stylesheets(stylesheets)
+
+    - if current_js
+      - unless (included_js && included_js.match(current_js))
+        - content_for :javascripts, current_js

@@ -1,9 +1,21 @@
 ---
 title: Block label
-stylesheet: /cla-main
 ---
 
 = model 'a',
+  stylesheet: '/assets/styles/app',
+  iframe: true
+  erb:
+    <label class="block-label" for="categories-0">
+      <input id="categories-0" name="categories" type="radio" value="clinneg">
+      Clinical negligence
+      <div class="field-help">
+        Doctors and nurses not treating you with due care during medical treatment
+      </div>
+    </label>
+
+= model 'b',
+  stylesheet: '/assets/styles/app2',
   iframe: true
   erb:
     <label class="block-label" for="categories-0">

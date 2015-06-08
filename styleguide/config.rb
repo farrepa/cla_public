@@ -1,25 +1,28 @@
+require 'lib/moj_skeleton'
+activate :moj_skeleton
+
 ###################
 # Page options, layouts, aliases and proxies
 ###################
 
 # With alternative layout
-page '/**', :layout => 'glyptotheque'
+page '/**',     layout: 'glyptotheque'
 # With no layout
-page "*.component", :layout => false
-page "/glyptotheque/*", :layout => false, directory_index: false
-page '*.css', :layout => false
-page '*.js', :layout => false
-page '*.json', :layout => false
+page "/glyptotheque/*", layout: false, directory_index: false
+page '*.css',   layout: false
+page '*.js',    layout: false
+page '*.json',  layout: false
 
-# Meta redirects
-# redirect 'index.html', to: 'prototypes/sample'
-
-# A path which all have the same layout
-# with_layout :admin do
-#   page "/admin/*"
-# end
+set :site_title, 'Styleguide'
 
 ready do
+  # Proxy default site index to Glyptotheque index template
+  unless sitemap.find_resource_by_path '/index.html'
+    proxy 'index.html', 'glyptotheque/site-index.html'
+  end
+  proxy 'sitemap.json', 'glyptotheque/sitemap.json'
+
+  last_dir = nil
   # Prerender resources to populate models
   resources = resources_for('/', exclude_indexes: true, allow_hidden: true).each do |r|
     r.render
@@ -27,14 +30,36 @@ ready do
 
   # Create mappings for isolated component pages (iframe embeddable)
   resources.each do |r|
-    r.metadata.models.each do |id, model|
-      proxy "#{r.path.sub(r.ext, '')}-#{id}-isolated.html",
-        r.path,
-        layout: 'isolated',
-        id: id
+    # Create virtual index files
+    dir = File.dirname(r.path)
+    index_exists = !!sitemap.find_resource_by_path("#{dir}/index.html")
+
+    if last_dir != dir && !index_exists
+      proxy "#{dir}/index.html", 'glyptotheque/directory-index.html', locals: {
+        section: get_section_of_resource(r)
+      }
+      last_dir = dir
+    end
+
+    if r.metadata[:models]
+      dir = File.dirname(r.path)
+      r.metadata.models.each do |id, model|
+        proxy "#{r.path.sub(r.ext, '')}-#{id}-isolated.html",
+          r.path,
+          layout: 'isolated',
+          iframe: model.iframe,
+          id: id,
+          locals: {
+            section: get_section_of_resource(r)
+          }
+      end
     end
   end
 end
+
+activate :sculptor
+activate :syntax, css_class: 'codehilite'
+activate :autoprefixer
 
 ###################
 # Helpers
@@ -44,8 +69,8 @@ end
 # end
 
 set :css_dir, 'assets/styles'
-set :js_dir, 'assets/js'
-set :images_dir, 'assets/img'
+set :js_dir, 'assets/scripts'
+set :images_dir, 'assets/images'
 
 set :relative_links, true
 
@@ -53,19 +78,6 @@ bowerrc_dir = JSON.parse(IO.read("#{root}/.bowerrc"))['directory']
 
 # Compass configuration
 compass_config do |config|
-  import_paths = %w(normalize.css)
-
-  import_paths.each do |path|
-    full_path = File.join(root, bowerrc_dir, path)
-    config.add_import_path(full_path)
-    config.add_import_path(Sass::CssImporter::Importer.new(full_path))
-  end
-
-  # Add project specific style dependencies
-  cla_styles = File.expand_path('../', root)
-  govuk_styles = File.expand_path('../node_modules/govuk_frontend_toolkit', root)
-  config.add_import_path(cla_styles, govuk_styles)
-
   config.sass_options = {
     quiet: true
   }
@@ -78,19 +90,13 @@ ready do
   sprockets.append_path(File.join(root, bowerrc_dir))
 end
 
-activate :model
-activate :data_loaders
-activate :resource_helpers
-activate :outliner
-activate :syntax, css_class: 'codehilite'
-
 Slim::Engine.disable_option_validator!
-Slim::Engine.set_default_options :pretty => true
-Slim::Engine.set_default_options :attr_list_delims => { '(' => ')', '[' => ']' }
+Slim::Engine.set_options pretty: true
+Slim::Engine.set_options attr_list_delims: { '(' => ')', '[' => ']' }
 
 # Development-secific configuration
 configure :development do
-  activate :livereload, animate: true
+  activate :livereload, no_swf: true
 end
 
 # Build-specific configuration

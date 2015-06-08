@@ -1,26 +1,11 @@
-source 'https://rubygems.org'
+# If you have OpenSSL installed, we recommend updating
+# the following line to use "https"
+source 'http://rubygems.org'
 
-gem 'sculptor', '0.0.11.1'
-gem 'middleman', '~>3.3'
-gem 'middleman-pry'
-gem 'middleman-deploy'
-gem 'nokogiri'
-gem 'rest_client'
-gem 'sass', '~>3.4'
-gem 'compass', github: 'chriseppstein/compass'
-gem 'sass-css-importer'
-gem 'slim'
+gem 'middleman', '~> 3.3.7'
+gem 'middleman-sculptor', '~> 0.20'
+gem 'middleman-livereload', '~> 3.4.2'
+gem 'middleman-deploy', '~> 1.0.0'
+gem 'middleman-autoprefixer'
+gem 'middleman-syntax'
 gem 'bourbon'
-gem 'susy'
-gem 'breakpoint'
-gem 'oj'
-
-gem 'middleman-syntax', github: 'middleman/middleman-syntax'
-
-# Custom LiveReload (animate transitions)
-gem 'rack-livereload',
-  github: 'tyom/rack-livereload',
-  branch: 'livereload-animate'
-gem 'middleman-livereload',
-  github: 'tyom/middleman-livereload',
-  branch: 'animate-transitions'

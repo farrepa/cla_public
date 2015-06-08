@@ -1,18 +1,23 @@
+- id = current_resource.metadata.options.id
+- current_model = current_resource.metadata.models[id]
+
 doctype html
 html
   head
     meta charset='utf-8'
-    title = current_page.data.title || yield_content(:page_title) || resource_file(current_page)
+    title = page_title
     meta name='viewport' content='width=device-width'
     = yield_content :stylesheets
-    = include_stylesheets(current_page.data.stylesheets || current_page.data.stylesheet)
+    - if current_model[:stylesheet]
+      = stylesheet_link_tag(current_model[:stylesheet])
+    - if current_resource.data.isolation_styles
+      style = current_resource.data.isolation_styles
 
   body class="#{yield_content(:body_class)}"
-    - id = current_resource.metadata.options.id
-    - current_model = current_resource.metadata.models[id]
-
     = current_model.html
 
+    = javascript_include_tag  'iframe-js'
     = yield_content :javascripts
-    = include_javascripts(current_page.data.javascripts || current_page.data.javascript)
+    - if current_resource.metadata.options.iframe
+      = include_javascripts(current_model[:javascript] || current_page.data.javascripts || current_page.data.javascript)
     = yield_content :post_body
