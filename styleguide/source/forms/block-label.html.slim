@@ -1,17 +1,52 @@
 ---
 title: Block label
-stylesheet: '/assets/styles/app'
+stylesheet: /styles/cla
+javascript: /scripts/cla
 isolation_styles: >
   body { margin: 5px 10px }
   .scope-options-list { max-width: 960px }
 ---
 
+h3 Expandable block label
+p Additional subfield is expanded when a certain option is selected.
+
 = model 'a'
   erb:
-    <label class="block-label" for="categories-0">
-      <input id="categories-0" name="categories" type="radio" value="clinneg">
-      Clinical negligence
-      <div class="field-help">
-        Doctors and nurses not treating you with due care during medical treatment
-      </div>
-    </label>
+    <div class="js-enabled">
+      <fieldset class="form-group" id="field-have_partner">
+        <legend class="fieldset-label" id="field-label-have_partner">
+          <span>Do you have a partner?</span>
+        </legend>
+        <div class="form-row field-help">
+          <span class="field-description">Your husband, wife, civil partner (unless you have permanently separated) or someone you live with as if you’re married</span>
+        </div>
+        <div class="form-row">
+          <label class="radio-inline" for="have_partner-0">
+            <input id="have_partner-0" name="have_partner" type="radio" value="1">
+            Yes
+          </label>
+          <label class="radio-inline" for="have_partner-1">
+            <input id="have_partner-1" name="have_partner" type="radio" value="0">
+            No
+          </label>
+          <fieldset class="form-group form-subfield s-hidden" data-controlled-by="have_partner" data-control-value="1" id="field-in_dispute">
+            <legend class="fieldset-label" id="field-label-in_dispute">
+              <span>Are you in a dispute with your partner?</span>
+            </legend>
+            <div class="form-row field-help">
+              <span class="field-description">This means your partner is the opponent in the dispute you need help with, for example a dispute over money or property </span>
+            </div>
+            <div class="form-row">
+              <label class="radio-inline" for="in_dispute-0">
+                  <input id="in_dispute-0" name="in_dispute" type="radio" value="1">
+                  Yes
+              </label>
+              <label class="radio-inline" for="in_dispute-1">
+                  <input id="in_dispute-1" name="in_dispute" type="radio" value="0">
+                  No
+              </label>
+            </div>
+          </fieldset>
+        </div>
+      </fieldset>
+    </div>

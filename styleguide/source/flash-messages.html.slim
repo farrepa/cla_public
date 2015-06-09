@@ -1,0 +1,49 @@
+---
+title: Flash messages
+stylesheet: /styles/cla
+---
+
+h3 Flash message on its own
+= model 'a'
+  erb:
+    <div id="content">
+      <div class="inner-block">
+        <div class="flash-messages">
+          <ul class="flash-messages-list">
+            <li class="flash-messages-item">For your security, the information you have entered has not been stored on your computer or mobile device.</li>
+          </ul>
+          <button class="flash-messages-close icon icon-remove" type="button">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+
+
+h3 Flash message under phase bar
+= model 'b'
+  erb:
+    <div id="content">
+      <div class="phase-banner">
+        <div class="language-picker">
+          <a href="/locale/cy_GB" data-ga="event:locale/switch/welsh">Cymraeg</a>
+        </div>
+        <p>
+          <strong class="phase-tag">BETA</strong>
+          <span>
+            This is a new service – your <a href="/feedback">feedback</a>
+            will help us to improve it.</span>
+        </p>
+      </div>
+
+      <div class="inner-block">
+        <div class="flash-messages">
+          <ul class="flash-messages-list">
+            <li class="flash-messages-item">For your security, the information you have entered has not been stored on your computer or mobile device.</li>
+          </ul>
+          <button class="flash-messages-close icon icon-remove" type="button">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>

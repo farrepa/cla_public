@@ -1,0 +1,50 @@
+---
+title: Form subfields
+stylesheet: /styles/cla
+javascript: /scripts/cla
+---
+
+h3 Informational subfield
+
+= model 'a'
+  erb:
+    <div class="js-enabled">
+      <fieldset class="form-group" id="field-have_valuables">
+        <legend class="fieldset-label" id="field-label-have_valuables">
+          <span>Do you have any valuable items worth over £500 each?</span>
+        </legend>
+        <div class="form-row">
+          <label class="radio-inline" for="have_valuables-0">
+              <input id="have_valuables-0" name="have_valuables" type="radio" value="1">
+              Yes
+          </label>
+          <label class="radio-inline" for="have_valuables-1">
+              <input id="have_valuables-1" name="have_valuables" type="radio" value="0">
+              No
+          </label>
+          <div class="form-group form-subfield split-panels">
+              <div class="panel">
+                  <strong>Don’t include</strong>
+                  <ul>
+                      <li>Furniture and appliances</li>
+                      <li>Your TV</li>
+                      <li>Mobile phones, laptops and other devices</li>
+                      <li>Clothing</li>
+                      <li>The vehicle you use every day, unless it is a classic car or luxury vehicle</li>
+                      <li>Equipment or tools you use for your work</li>
+                  </ul>
+              </div>
+              <div class="panel">
+                  <strong>Do include</strong>
+                  <ul>
+                      <li>Jewellery</li>
+                      <li>Art</li>
+                      <li>Antiques</li>
+                      <li>Caravans and other vehicles you don’t use every day</li>
+                      <li>Musical instruments, unless you’re a professional musician</li>
+                  </ul>
+              </div>
+          </div>
+        </div>
+      </fieldset>
+    </div>

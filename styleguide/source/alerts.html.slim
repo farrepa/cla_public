@@ -1,0 +1,43 @@
+---
+title: Alerts
+stylesheet: /styles/cla
+---
+
+h3 Alert info
+= model 'info'
+  erb:
+    <div class="alert alert-info" role="alert">
+      <div class="alert-message">
+        <p>
+          If you’re having trouble completing this form,
+          <a href="/reasons-for-contacting" id="callback-link">get in touch</a>.
+        </p>
+      </div>
+    </div>
+
+h3 Alert error
+= model 'error'
+  erb:
+    <div class="alert alert-error" role="alert">
+      <span class="icon icon-cross" aria-hidden="true"></span>
+      <div class="alert-message">
+        <p>
+          This alert requires your attention.
+        </p>
+      </div>
+    </div>
+
+h3 Alert with heading
+= model 'with-heading'
+  erb:
+    <div class="alert alert-info" role="alert" aria-labelledby="alert-heading-info">
+      <div class="alert-message">
+        <h3 class="alert-header" id="alert-heading-info">
+          What do you think about this service?
+        </h3>
+        <p>
+          Your feedback will improve this service.
+          Please <a href="https://www.gov.uk/done/check-if-civil-legal-advice-can-help-you">send us your thoughts</a>.
+        </p>
+      </div>
+    </div>

@@ -3,6 +3,10 @@
 - content_for :stylesheets, stylesheet_link_tag('glyptotheque')
 - content_for :body_class,  "section-#{get_section_of_resource(current_page).slug}"
 
+- git_branch = `git rev-parse --abbrev-ref HEAD`.strip
+- github_repo_url = 'https://github.com/ministryofjustice/cla_public/tree/styleguide'
+- page_path = current_page.source_file.sub source_dir, ''
+
 = wrap_layout :layout do
   - if resource_tree('/').any?
     = partial 'glyptotheque/nav'
@@ -17,6 +21,13 @@
           h1.glypto-title = current_page.data.title || getcurrent_page
         - elsif get_section_of_resource(current_page)
           h1.glypto-title = get_section_of_resource(current_page).title
+
+        .glypto-source.fa.fa-github
+          a> href="#{github_repo_url}" target="_blank" Repo
+          ' •
+          a href="#{github_repo_url}/#{git_branch}/#{source}#{page_path}" target="_blank"
+            | Page source
+
     .glypto-container = yield
 
   javascript:

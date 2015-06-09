@@ -1,0 +1,30 @@
+---
+title: Confirmation
+stylesheet: /styles/cla
+---
+
+h3 Receipt of case file confirmation block
+
+= model 'a'
+  erb:
+    <div id="content">
+      <div class="inner-block">
+        <header class="confirmation">
+          <h1>Your details have been submitted</h1>
+          <p>
+            Your reference number is
+            <strong class="confirmation-ref-number">
+              NH-4245-1813
+            </strong>
+          </p>
+          <p class="confirmation-inset">
+            You can now call CLA on <strong>0345 345 4 345</strong>.<br>
+            Please quote your reference number when you call. Find out about
+            <a href="https://www.gov.uk/call-charges" rel="external" target="_blank">call charges</a>.
+          </p>
+          <p class="print-page-button">
+            <button type="button" class="button button-large button-secondary">Print this page</button>
+          </p>
+        </header>
+      </div>
+    </div>

@@ -87,7 +87,16 @@ end
 
 # Sprockets
 ready do
-  sprockets.append_path(File.join(root, bowerrc_dir))
+  # Import CLA images as they are used within CLA
+  cla_assets = '../../cla_public/static/images'
+  cla_dir = sprockets.append_path(cla_assets).last
+  Dir.chdir(cla_dir) do
+    Dir['**/*.png'].each do |asset|
+      sprockets.import_asset(asset) do |logical_path|
+        "images/#{logical_path}"
+      end
+    end
+  end
 end
 
 compass_config do |config|
