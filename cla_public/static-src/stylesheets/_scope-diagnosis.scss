@@ -10,10 +10,13 @@
   padding: 0;
   position: relative;
 
+  .option-label {
+    color: black;
+  }
+
   a {
     display: block;
     text-decoration: none;
-    color: black;
     padding: 13px 60px 10px 25px;
     border: 1px solid transparent;
 
