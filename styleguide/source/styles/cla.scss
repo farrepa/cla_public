@@ -1,17 +1,11 @@
-@import 'bourbon';
-@import 'susy';
-@import 'breakpoint';
+// GOV.UK Frontend Toolkit
+@import "govuk_frontend_toolkit/stylesheets/colours";
+@import "govuk_frontend_toolkit/stylesheets/grid_layout";
+@import "govuk_frontend_toolkit/stylesheets/typography";
+@import "govuk_frontend_toolkit/stylesheets/design-patterns/alpha-beta";
+@import "govuk_frontend_toolkit/stylesheets/design-patterns/buttons";
 
-@import 'govuk/$colours';
-@import 'govuk/$variables';
-@import 'govuk/@functions';
-@import 'govuk/@mixins';
-
-@import 'govuk/%common';
-
-@import 'govuk/fonts';
-@import 'govuk/typography';
-@import 'govuk/utilities';
-
+// CLA
 @import 'scope-diagnosis';
+@import 'typography';
 @import 'forms/field-help';

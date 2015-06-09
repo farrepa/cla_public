@@ -92,6 +92,7 @@ end
 
 compass_config do |config|
   config.add_import_path("../../cla_public/static-src/stylesheets")
+  config.add_import_path("../../node_modules/govuk_frontend_toolkit")
 end
 
 Slim::Engine.disable_option_validator!
