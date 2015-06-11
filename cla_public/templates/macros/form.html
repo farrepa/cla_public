@@ -400,6 +400,9 @@
 {% macro actions(button_label) %}
   <p class="form-actions">
     <button type="submit" class="button button-larger">{{ button_label }}</button>
+    {% if not request.path.startswith('/result/') %}
+      <button class="button button-secondary">Save for later</button>
+    {% endif %}
   </p>
 {% endmacro %}
 
