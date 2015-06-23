@@ -7,15 +7,8 @@
 @import 'govuk/@functions';
 @import 'govuk/@mixins';
 
-@import 'govuk/%common';
-
 @import 'govuk/fonts';
 @import 'govuk/typography';
 @import 'govuk/utilities';
 
 @import 'govuk/elements';
-
-
-.glypto-container {
-  @include container(960px);
-}
