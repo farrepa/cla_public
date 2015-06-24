@@ -21,7 +21,7 @@ from cla_public.apps.checker.forms import AboutYouForm, YourBenefitsForm, \
 from cla_public.apps.checker.means_test import MeansTest, MeansTestError
 from cla_public.apps.checker.validators import IgnoreIf
 from cla_public.apps.checker import honeypot
-from cla_public.apps.checker import filters # Used in templates
+from cla_public.apps.checker import filters  # Used in templates
 from cla_public.libs.utils import override_locale, category_id_to_name
 from cla_public.libs.views import AllowSessionOverride, FormWizard, \
     FormWizardStep, RequiresSession, ValidFormOnOptions, HasFormMixin
@@ -370,7 +370,7 @@ class HelpOrganisations(views.MethodView):
         organisations = get_organisation_list(article_category__name=category_name)
 
         return {
-            'organisations':organisations,
+            'organisations': organisations,
             'category': category,
             'category_name': trans_category_name,
             'ELIGIBILITY_REASONS': ELIGIBILITY_REASONS,
@@ -395,3 +395,28 @@ checker.add_url_rule(
     view_func=HelpOrganisations.as_view('help_organisations'),
     methods=['GET']
 )
+
+
+@checker.route('/legal-aid-available')
+def interstitial():
+    """
+    Interstitial page after passing scope test
+    """
+    if not session or not session.is_current or not session.checker.category:
+        return redirect(url_for('base.session_expired'))
+
+    category = session.checker.category
+    category_name = session.checker.category_name
+    with override_locale('en'):
+        category_name_english = unicode(session.checker.category_name)
+
+    organisations = get_organisation_list(article_category__name=category_name_english)
+
+    context = {
+        'category': category,
+        'category_name': category_name,
+        'organisations': organisations,
+        'hide_help_orgs_intro': True,
+        'show_help_orgs': 'show' in request.args,
+    }
+    return render_template('interstitial.html', **context)

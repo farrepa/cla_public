@@ -2,11 +2,17 @@
 
 {% if organisations %}
   <div class="help-organisations">
+
+    {% if not hide_help_orgs_intro %}
+
     <h2>{{ _('Help organisations for problems about %(category_name)s', category_name=(category_name if category != 'violence' else 'domestic violence')|lower) }}</h2>
     <p>
       {% trans %}You may still get help and advice from the organisations listed
       below. You don’t have to qualify for legal aid.{% endtrans %}
     </p>
+
+    {% endif %}
+
     <ul class="org-list">
       {% for org in organisations %}
         {% set has_contact_details = org.telephone_numbers or org.email %}
