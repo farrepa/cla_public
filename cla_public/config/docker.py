@@ -18,7 +18,7 @@ if DEBUG:
     LOGGING['handlers']['debug_file'] = {
         'level': 'DEBUG',
         'class': 'logging.handlers.RotatingFileHandler',
-        'filename': '/var/log/wsgi/debug.log',
+        'filename': 'debug.log',
         'maxBytes': 1024 * 1024 * 5,  # 5MB
         'backupCount': 7,
         'formatter': 'verbose'}
@@ -33,7 +33,7 @@ else:
     LOGGING['handlers']['production_file'] = {
         'level': 'INFO',
         'class': 'logging.handlers.RotatingFileHandler',
-        'filename': '/var/log/wsgi/app.log',
+        'filename': 'app.log',
         'maxBytes': 1024 * 1024 * 5,  # 5MB
         'backupCount': 7,
         'formatter': 'logstash'}
