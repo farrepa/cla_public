@@ -41,7 +41,7 @@ class DiagnosisApiClient(object):
     def post_to_scope(self, path='', payload={}):
         request_args = self.request_args()
         request_args['json'] = payload
-        return requests.post(self.request_path(path), **request_args, verify=False)
+        return requests.post(self.request_path(path), verify=False, **request_args)
 
     def create_diagnosis(self):
         if not session.checker.get(REF_KEY):
