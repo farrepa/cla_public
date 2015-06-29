@@ -77,7 +77,7 @@ class DiagnosisApiClient(object):
         session.checker[PREV_KEY] = choices_list
         if len(previous_choices) == len(choices_list):
             # reload page - same choices as before
-            return requests.get(self.request_path(), **self.request_args())
+            return requests.get(self.request_path(), verify=False, **self.request_args())
 
         steps, direction = self.get_steps_and_direction(
             previous_choices, choices_list)
