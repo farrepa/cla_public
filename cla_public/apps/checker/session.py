@@ -2,6 +2,7 @@ from collections import OrderedDict
 import uuid
 from base64 import b64encode, b64decode
 from datetime import datetime, date, time
+from speaklater import _LazyString
 from werkzeug.http import http_date, parse_date
 from flask import Markup, json
 from flask._compat import iteritems, text_type
@@ -26,6 +27,8 @@ class CustomJSONEncoder(JSONEncoder):
                 isinstance(obj, time),
                 isinstance(obj, datetime)]):
             return obj.isoformat()
+        elif isinstance(obj, _LazyString):
+            return unicode(obj)
         return super(CustomJSONEncoder, self).default(obj)
 
 
@@ -178,6 +181,8 @@ class CheckerSessionObject(dict):
 
     @property
     def callback_time(self):
+        if self.contact_type == 'thirdparty':
+            return self.field('ContactForm', 'thirdparty', {}).get('time', None)
         return self.field('ContactForm', 'callback', {}).get('time', None)
 
     def add_note(self, key, note):
@@ -198,8 +203,8 @@ class CheckerSessionObject(dict):
         return Notes()
 
     @property
-    def callback_requested(self):
-        return self.is_yes('ContactForm', 'callback_requested')
+    def contact_type(self):
+        return self.get('ContactForm', {}).get('contact_type')
 
 
 class CheckerSession(SecureCookieSession, SessionMixin):
@@ -242,9 +247,15 @@ class CheckerSession(SecureCookieSession, SessionMixin):
             stored = {
                 'case_ref': self.checker.get('case_ref'),
                 'callback_time': self.checker.callback_time,
-                'callback_requested': self.checker.callback_requested,
+                'callback_requested': self.checker.contact_type in [
+                    'callback',
+                    'thirdparty'
+                ],
+                'contact_type': self.checker.contact_type,
                 'category': self.checker.category,
-                'eligibility': self.checker.eligibility
+                'eligibility': self.checker.eligibility,
+                'adaptations': [k for k, v in \
+                    self.checker['ContactForm']['adaptations'].items() if v]
             }
             self.clear_checker()
             self.stored = stored

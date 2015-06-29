@@ -2,14 +2,28 @@
 "Flask pluggable view mixins"
 
 import copy
+import datetime
 from itertools import dropwhile, ifilter
 import logging
 
 from flask import abort, current_app, redirect, render_template, request, \
-    session, url_for, views
+    session, url_for, views, jsonify, Response
 
 
 log = logging.getLogger(__name__)
+
+
+class EnsureSessionExists(object):
+    """
+    View mixin to create a session if no current one exists
+    Used on contact page which should be reachable directly
+    from a link on the start page
+    """
+    def dispatch_request(self, *args, **kwargs):
+        if not session or not session.is_current:
+            session.clear()
+            session.checker['started'] = datetime.datetime.now()
+        return super(EnsureSessionExists, self).dispatch_request(*args, **kwargs)
 
 
 class RequiresSession(object):
@@ -20,18 +34,29 @@ class RequiresSession(object):
     session_expired_url = '/session-expired'
 
     def dispatch_request(self, *args, **kwargs):
-        if not session or not session.is_current:
+        if (not session or not session.is_current) \
+                and request.method.lower() != 'options':
             return redirect(self.session_expired_url)
         return super(RequiresSession, self).dispatch_request(*args, **kwargs)
 
 
-class SessionBackedFormView(RequiresSession, views.MethodView, object):
-    """
-    Saves and loads form data to and from the session
-    """
+class ValidFormOnOptions(object):
 
+    def options(self, *args, **kwargs):
+        """
+        Returns validation errors if a form is submitted to it otherwise
+        returns Response with allowed methods
+        """
+        if 'application/x-www-form-urlencoded' in request.content_type:
+            self.form.validate()
+            return jsonify(self.form.errors)
+        rv = Response()
+        rv.allow.update(self.methods)
+        return rv
+
+
+class HasFormMixin(object):
     form_class = None
-    template = None
 
     @property
     def form(self):
@@ -40,16 +65,32 @@ class SessionBackedFormView(RequiresSession, views.MethodView, object):
         session data.
         """
         if getattr(self, '_form', None) is None:
-            self._form = self.form_class(
-                request.form,
-                **session.checker.get(self.form_class.__name__, {}))
+            data = {}
+            if hasattr(self, 'default_form_data'):
+                data.update(self.default_form_data)
+            data = session.checker.get(self.form_class.__name__, data)
+            self._form = self.form_class(formdata=request.form, data=data)
         return self._form
+
+
+class SessionBackedFormView(
+    HasFormMixin,
+    RequiresSession,
+    views.MethodView,
+    ValidFormOnOptions,
+    object
+):
+    """
+    Saves and loads form data to and from the session
+    """
+    template = None
+    template_context = {}
 
     def get(self, *args, **kwargs):
         """
         Render template with form
         """
-        return render_template(self.template, form=self.form)
+        return render_template(self.template, form=self.form, **self.template_context)
 
     def post(self, *args, **kwargs):
         """

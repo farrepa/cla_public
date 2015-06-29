@@ -1,6 +1,6 @@
 'use strict';
 
-var common = require('../../modules/common-functions');
+var common = require('../modules/common-functions');
 
 module.exports = {
   'Start page': function(client) {
@@ -38,7 +38,7 @@ module.exports = {
   'Eligible page (request callback)': function(client) {
     client
       .assert.urlContains('/result/eligible')
-      .waitForElementVisible('input[name="callback_requested"]', 5000)
+      .waitForElementVisible('input[name="contact_type"]', 5000)
       .assert.containsText('h1', 'Contact Civil Legal Advice')
       .assert.containsText('body', 'Based on the answers you’ve given today, you might qualify for legal aid.')
     ;
@@ -51,7 +51,7 @@ module.exports = {
     common.submitAndCheckForError(client, 'This form has errors.\nPlease see below for the errors you need to correct.');
 
     client
-      .click('input[name="callback_requested"][value="1"]')
+      .click('input[name="contact_type"][value="callback"]')
     ;
 
     ['full_name', 'callback-contact_number'].forEach(function(item) {
@@ -104,7 +104,7 @@ module.exports = {
       .click('body')
       .useXpath()
       .waitForElementVisible('//input[@id="address-post_code"]/ancestor::fieldset//div[@class="form-row field-error"]', 25000)
-      .assert.containsText('//input[@id="address-post_code"]/ancestor::fieldset//div[@class="form-row field-error"]', 'No addresses were found with that postcode')
+      .assert.containsText('//input[@id="address-post_code"]/ancestor::fieldset//div[@class="form-row field-error"]', 'No addresses were found with that postcode, but you can still enter your address manually')
       .useCss()
     ;
 

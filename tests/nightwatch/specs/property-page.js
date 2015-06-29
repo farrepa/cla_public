@@ -1,8 +1,8 @@
 'use strict';
 
 var util = require('util');
-var common = require('../../modules/common-functions');
-var PROPERTY_QUESTIONS = require('../../modules/constants').PROPERTY_QUESTIONS;
+var common = require('../modules/common-functions');
+var PROPERTY_QUESTIONS = require('../modules/constants').PROPERTY_QUESTIONS;
 
 module.exports = {
   'Start page': function(client) {
@@ -63,7 +63,7 @@ module.exports = {
     });
     questions.push({
       name: 'properties-0-mortgage_payments',
-      errorText: 'Not a valid amount'
+      errorText: 'Please enter 0 if you have no mortgage'
     });
     common.submitAndCheckForFieldError(client, questions);
 

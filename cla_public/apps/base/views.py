@@ -6,15 +6,16 @@ import datetime
 from urlparse import urlparse, urljoin
 
 from flask import abort, current_app, jsonify, redirect, render_template, \
-    session, url_for, request
-from flask.ext.babel import lazy_gettext as _, gettext
+    session, url_for, request, views
+from flask.ext.babel import lazy_gettext as _
 
-from cla_common.smoketest import smoketest
 from cla_public.apps.base import base
-from cla_public.apps.base.forms import FeedbackForm
+from cla_public.apps.base.forms import FeedbackForm, ReasonsForContactingForm
 import cla_public.apps.base.filters
 import cla_public.apps.base.extensions
+from cla_public.apps.checker.api import post_reasons_for_contacting
 from cla_public.libs import zendesk
+from cla_public.libs.views import HasFormMixin, ValidFormOnOptions
 
 
 log = logging.getLogger(__name__)
@@ -36,25 +37,105 @@ def privacy():
     return render_template('privacy.html')
 
 
-@base.route('/feedback', methods=['GET', 'POST'])
-def feedback():
-    form = FeedbackForm()
-    error = None
+class ZendeskView(HasFormMixin, views.MethodView, ValidFormOnOptions):
+    """
+    Abstract view for Zendesk forms
+    """
+    template = None
+    redirect_to = None
 
-    if form.validate_on_submit():
-        response = zendesk.create_ticket(form.api_payload())
+    def __init__(self):
+        if not self.form_class or not self.template or not self.redirect_to:
+            raise NotImplementedError
+        super(ZendeskView, self).__init__()
 
-        if response.status_code < 300:
-            return redirect(url_for('.feedback_confirmation'))
-        else:
-            error = _('Something went wrong. Please try again.')
+    @property
+    def default_form_data(self):
+        return {'referrer': request.referrer or 'Unknown'}
 
-    return render_template('feedback.html', form=form, zd_error=error)
+    def get(self):
+        return self.render_form()
+
+    def post(self):
+        error = None
+
+        if self.form.validate_on_submit():
+            response = zendesk.create_ticket(self.form.api_payload())
+
+            if response.status_code < 300:
+                return self.success_redirect()
+            else:
+                error = _('Something went wrong. Please try again.')
+
+        return self.render_form(error)
+
+    def render_form(self, error=None):
+        return render_template(self.template, form=self.form, zd_error=error)
+
+    def success_redirect(self):
+        return redirect(url_for(self.redirect_to))
+
+
+class Feedback(ZendeskView):
+    """
+    General feedback form
+    """
+    form_class = FeedbackForm
+    template = 'feedback.html'
+    redirect_to = '.feedback_confirmation'
+
+
+base.add_url_rule(
+    '/feedback',
+    view_func=Feedback.as_view('feedback'),
+    methods=('GET', 'POST', 'OPTIONS')
+)
 
 
 @base.route('/feedback/confirmation')
 def feedback_confirmation():
     return render_template('feedback-confirmation.html')
+
+
+class ReasonsForContacting(ZendeskView):
+    """
+    Interstitial form to ascertain why users are dropping out of
+    the checker service
+
+    NB: Shares code with Feedback view, but no longer in fact
+        posts to Zendesk. If feedback is ever redirected to the
+        database as well, move the code here up into ZendeskView
+    """
+    MODEL_REF_SESSION_KEY = 'reason_for_contact'
+    GA_SESSION_KEY = 'reason_for_contact_ga'
+
+    form_class = ReasonsForContactingForm
+    template = 'reasons-for-contacting.html'
+    redirect_to = 'contact.get_in_touch'
+
+    def post(self):
+        error = None
+        if self.form.validate_on_submit():
+            if len(self.form.reasons.data) == 0:
+                # allows skipping form if nothing is selected
+                return self.success_redirect()
+
+            session[self.GA_SESSION_KEY] = ', '.join(self.form.reasons.data)
+            response = post_reasons_for_contacting(form=self.form)
+            # ignore if reasons not saved as they're not vital
+            if response and 'reference' in response:
+                session[self.MODEL_REF_SESSION_KEY] = response['reference']
+
+            return self.success_redirect()
+
+        return self.render_form(error)
+
+
+base.add_url_rule(
+    '/reasons-for-contacting',
+    view_func=ReasonsForContacting.as_view('reasons_for_contacting'),
+    methods=('GET', 'POST', 'OPTIONS')
+)
 
 
 @base.route('/session')
@@ -140,7 +221,6 @@ def smoke_tests():
     """
     Run smoke tests and return results as JSON datastructure
     """
-
     from cla_common.smoketest import smoketest
     from cla_public.apps.checker.tests.smoketests import SmokeTests
 

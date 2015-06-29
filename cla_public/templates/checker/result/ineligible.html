@@ -13,9 +13,9 @@
   <h1>{{ _('You’re unlikely to get legal aid') }}</h1>
 
   <p>
-    {% trans fromcla = 'from CLA ' if category == 'violence' else '' %}From
+    {% trans fromcla = _('from CLA') if category == 'violence' else '' %}From
     what you have told us today it looks like you won't be able to get
-    legal aid {{ fromcla }}as you don’t qualify financially{% endtrans %}.
+    legal aid {{ fromcla }} as you don’t qualify financially{% endtrans %}.
   </p>
 
   <p>{{ _('This is because') }}{% if multi %}:</p><ul>{% endif %}
@@ -50,7 +50,7 @@
     <p>
       {% trans %}If you want to make an application to court about a family matter
       you need to first of all see if family mediation will help. Use the
-      <a href="http://www.familymediationcouncil.org.uk/" rel="external">Family Mediation Council</a>
+      <a href="http://www.familymediationcouncil.org.uk/" rel="external" target="_blank">Family Mediation Council</a>
       directory to find a mediator and make an appointment for a Mediation
       Information and Assessment Meeting (MIAM).{% endtrans %}
     </p>
@@ -77,7 +77,9 @@
   {% endif %}
 
   <p>
-    <a class="button" href="https://www.gov.uk/find-a-legal-adviser">{{ _('Find a legal adviser') }}</a>
+    <a class="button button-larger" href="https://www.gov.uk/find-a-legal-adviser" target="_blank">
+      {{ _('Find a legal adviser') }}
+    </a>
   </p>
 
   {% include '_help-orgs.html' %}

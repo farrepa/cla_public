@@ -24,7 +24,7 @@ from cla_public.apps.checker import honeypot
 from cla_public.apps.checker import filters # Used in templates
 from cla_public.libs.utils import override_locale, category_id_to_name
 from cla_public.libs.views import AllowSessionOverride, FormWizard, \
-    FormWizardStep, RequiresSession
+    FormWizardStep, RequiresSession, ValidFormOnOptions, HasFormMixin
 from cla_public.libs import laalaa
 
 
@@ -95,7 +95,7 @@ def is_null(field):
     return False
 
 
-class CheckerStep(UpdatesMeansTest, FormWizardStep):
+class CheckerStep(ValidFormOnOptions, UpdatesMeansTest, FormWizardStep):
 
     def completed_fields(self):
         session_data = session.checker.get(self.form_class.__name__, {})
@@ -136,18 +136,50 @@ class CheckerStep(UpdatesMeansTest, FormWizardStep):
             {}
         ).get('is_completed', False)
 
+    @property
+    def is_current(self):
+        if request.view_args:
+            return self.name == request.view_args['step']
+        else:
+            return False
+
+    @property
+    def count(self):
+        steps = CheckerWizard('').relevant_steps[:-1]
+        for index, item in enumerate(steps):
+            if item.name == self.name:
+                return index + 1
+        return None
+
     def render(self, *args, **kwargs):
         steps = CheckerWizard('').relevant_steps[:-1]
-        return render_template(self.template, steps=steps, form=self.form)
+        current_step = None
+        if self.count:
+            current_step = steps[self.count-1]
+
+        return render_template(
+            self.template,
+            steps=steps,
+            current_step=current_step,
+            form=self.form
+        )
 
 
-class ReviewStep(FormWizardStep):
+class ReviewStep(CheckerStep):
+    @property
+    def count(self):
+        steps = CheckerWizard('').relevant_steps[:-1]
+        return len(steps) + 1
 
     def render(self, *args, **kwargs):
-        review_steps = CheckerWizard('').review_steps
-        steps = review_steps or CheckerWizard('').relevant_steps[:-1]
-        return render_template(self.template, steps=steps,
-                               review_steps=review_steps, form=self.form)
+        steps = CheckerWizard('').relevant_steps[:-1]
+        current_step = self
+        return render_template(
+            self.template,
+            steps=steps,
+            current_step=current_step,
+            form=self.form
+        )
 
 
 class CheckerWizard(AllowSessionOverride, FormWizard):
@@ -185,6 +217,9 @@ class CheckerWizard(AllowSessionOverride, FormWizard):
             return redirect(url_for(
                 '.help_organisations',
                 category_name=session.checker.category_slug))
+
+        if session.checker.need_more_info:
+            return redirect(url_for('.provisional'))
 
         return redirect(url_for('.eligible'))
 
@@ -225,7 +260,8 @@ class CheckerWizard(AllowSessionOverride, FormWizard):
         return False
 
 
-checker.add_url_rule('/<step>', view_func=CheckerWizard.as_view('wizard'))
+checker.add_url_rule('/<step>', view_func=CheckerWizard.as_view('wizard'),
+                     methods=('GET', 'POST', 'OPTIONS'))
 
 
 class FaceToFace(views.MethodView, object):
@@ -235,7 +271,7 @@ class FaceToFace(views.MethodView, object):
 
         session.store({'category': request.args.get('category') })
 
-        category_name = 'your issue'
+        category_name = None
 
         if session.stored['category']:
             category_name = category_id_to_name(session.stored['category'])
@@ -249,10 +285,10 @@ class FaceToFace(views.MethodView, object):
 
 
 checker.add_url_rule(
-    '/result/face-to-face', view_func=FaceToFace.as_view('face-to-face'))
+    '/scope/refer/legal-adviser', view_func=FaceToFace.as_view('face-to-face'))
 
 
-class EligibleNoCallBack(views.MethodView, object):
+class EligibleFaceToFace(views.MethodView, object):
 
     def get(self):
         form = FindLegalAdviserForm(request.args, csrf_enabled=False)
@@ -260,43 +296,59 @@ class EligibleNoCallBack(views.MethodView, object):
 
         session.clear_checker()
         session.store({'category': request.args.get('category')})
+        category_name = None
         if session.stored['category']:
             category_name = category_id_to_name(session.stored['category'])
 
-        return render_template('checker/result/eligible-no-callback.html',
+        return render_template('checker/result/eligible-f2f.html',
             data=data, form=form, category_name=category_name)
 
 checker.add_url_rule(
-    '/find-legal-adviser',
-    view_func=EligibleNoCallBack.as_view('find-legal-adviser')
+    '/result/refer/legal-adviser',
+    view_func=EligibleFaceToFace.as_view('find-legal-adviser')
 )
 
 
-class Eligible(RequiresSession, views.MethodView, object):
+class Eligible(HasFormMixin, RequiresSession, views.MethodView, ValidFormOnOptions, object):
+
+    form_class = ContactForm
 
     def get(self):
-        steps = steps = CheckerWizard('').relevant_steps[:-1]
+        steps = CheckerWizard('').relevant_steps[:-1]
         if session.checker.category in NO_CALLBACK_CATEGORIES:
             return redirect(
                 url_for('.find-legal-adviser', category=session.checker.category)
             )
 
+        current_step = {
+            'count': len(steps) + 1,
+            'is_current': True,
+            'is_completed': False
+        }
+
         return render_template(
             'checker/result/eligible.html',
+            current_step=current_step,
             steps=steps,
-            form=ContactForm()
+            form=self.form
         )
 
 
 checker.add_url_rule(
     '/result/eligible',
     view_func=Eligible.as_view('eligible'),
-    methods=['GET', 'POST']
+    methods=('GET', 'POST', 'OPTIONS')
+)
+
+checker.add_url_rule(
+    '/result/provisional',
+    view_func=Eligible.as_view('provisional'),
+    methods=('GET', 'POST', 'OPTIONS')
 )
 
 
 class HelpOrganisations(views.MethodView):
-    _template = 'help-organisations.html'
+    _template = 'checker/result/ineligible.html'
 
     def get_context(self, category_name):
         category_name = category_name.replace('-', ' ').capitalize()
@@ -339,7 +391,7 @@ class HelpOrganisations(views.MethodView):
 
 
 checker.add_url_rule(
-    '/help-organisations/<category_name>',
+    '/result/refer/<category_name>',
     view_func=HelpOrganisations.as_view('help_organisations'),
     methods=['GET']
 )
