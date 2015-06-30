@@ -16,11 +16,9 @@ RUN echo "Europe/London" > /etc/timezone  &&  dpkg-reconfigure -f noninteractive
 RUN DEBIAN_FRONTEND='noninteractive' \
   apt-get update && \
   apt-get -y --force-yes install bash apt-utils build-essential git software-properties-common libpq-dev g++ make libpcre3 libpcre3-dev \
-  libxslt-dev libxml2-dev wget libffi-dev nodejs
+  libxslt-dev libxml2-dev wget libffi-dev
 
 RUN apt-get clean
-
-RUN ln -s /usr/bin/nodejs /usr/bin/node
 
 # Install latest python
 ADD ./docker/install_python.sh /install_python.sh
@@ -33,10 +31,6 @@ RUN pip install -r /requirements.txt
 
 # Add project directory to docker
 ADD . /home/app/flask
-
-# Install
-RUN npm install && bower install && gulp build
-
 RUN  chown -R app: /home/app/flask
 
 
