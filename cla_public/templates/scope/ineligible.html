@@ -3,6 +3,8 @@
 {% set title = _('Legal aid is not available for this type of problem') %}
 {% block page_title %}{{ title }} - {{ super() }}{% endblock %}
 
+{% import "macros/help-orgs.html" as HelpOrganisations %}
+
 {% block inner_content %}
   <h1>{{ _('Legal aid is not usually available for this type of problem') }}</h1>
 
@@ -25,6 +27,8 @@
     {{ _('Find a legal adviser') }}
   </a>
 
-  {% include '_help-orgs.html' %}
+  <hr>
+
+  {{ HelpOrganisations.org_list_container(organisations, category_name, truncate=5) }}
 
 {% endblock %}
