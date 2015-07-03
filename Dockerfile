@@ -40,3 +40,4 @@ WORKDIR /home/app/flask
 ENV APP_HOME /home/app/flask
 USER app
 EXPOSE 8000
+ENTRYPOINT ["uwsgi", "--ini", "conf/uwsgi.ini"]
