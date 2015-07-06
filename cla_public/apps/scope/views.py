@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import re
 from cla_common.constants import DIAGNOSIS_SCOPE
 from cla_public.apps.checker.views import HelpOrganisations
 from cla_public.apps.scope import scope
@@ -68,7 +69,25 @@ class ScopeDiagnosis(RequiresSession, views.MethodView):
 
         display_choices = map(add_link, response_json.get('choices', []))
 
+        # Start HACK for user testing.
+        # TODO properly if users confirm the need
+
+        IN_SCOPE = ['Debt', 'Domestic abuse', 'Discrimination', 'Education',
+            'Employment', 'Family', 'Housing', 'Immigration', 'Welfare benefits']
+
+        def in_scope(category):
+            return re.sub('<[^<]+?>', '', category['label']) in IN_SCOPE
+        def out_of_scope(category):
+            return re.sub('<[^<]+?>', '', category['label']) not in IN_SCOPE
+
+        in_scope_choices = filter(in_scope, display_choices)
+        out_of_scope_choices = filter(out_of_scope, display_choices)
+
+        # End HACK
+
         return render_template('scope/diagnosis.html',
+                               in_scope_choices=in_scope_choices,
+                               out_of_scope_choices=out_of_scope_choices,
                                choices=display_choices,
                                nodes=nodes)
 

@@ -2,6 +2,10 @@
   list-style-type: none;
   margin: 1em 0 2em;
   padding: 0;
+
+  .fieldset-group & {
+    margin: 0;
+  }
 }
 
 .scope-options-list-item {

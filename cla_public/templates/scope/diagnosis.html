@@ -43,6 +43,21 @@
   </aside>
 {% endblock %}
 
+{% macro scope_options_list(list) %}
+  <ul class="scope-options-list">
+    {% for choice in list %}
+      <li class="scope-options-list-item">
+        <a href="{{ choice.url }}"{% if not nodes|length %} data-ga="event:category-of-law/{{ choice.label|striptags }}"{% endif %}>
+          <span class="option-label">{{ choice.label|safe|striptags }}</span>
+          {% if choice.help_text %}
+            <div class="field-help">{{ choice.help_text|safe|striptags }}</div>
+          {% endif %}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endmacro %}
+
 
 {% block inner_content %}
   <h1>{{ _('What do you need help with?') }}</h1>
@@ -57,18 +72,21 @@
       {% endif %}
     </h2>
 
-    <ul class="scope-options-list">
-      {% for choice in choices %}
-        <li class="scope-options-list-item">
-          <a href="{{ choice.url }}"{% if not nodes|length %} data-ga="event:category-of-law/{{ choice.label|striptags }}"{% endif %}>
-            <span class="option-label">{{ choice.label|safe|striptags }}</span>
-            {% if choice.help_text %}
-              <div class="field-help">{{ choice.help_text|safe|striptags }}</div>
-            {% endif %}
-          </a>
-        </li>
-      {% endfor %}
-    </ul>
+    {% if nodes|length %}
+      {{ scope_options_list(choices) }}
+    {% else %}
+      <fieldset class="fieldset-group">
+        <legend class="fieldset-label">Areas covered by Legal Aid</legend>
+        {{ scope_options_list(in_scope_choices) }}
+      </fieldset>
+
+      <fieldset class="fieldset-group">
+        <legend class="fieldset-label">Areas covered by Legal Aid</legend>
+        <ul class="scope-options-list">
+          {{ scope_options_list(out_of_scope_choices) }}
+        </ul>
+      </fieldset>
+    {% endif %}
   </div>
 
   <p>
