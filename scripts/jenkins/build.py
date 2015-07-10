@@ -179,10 +179,10 @@ def main():
         update_static_assets()
         compile_messages(venv_path)
         clean_pyc()
-        # run_server(env)
-        # wait_until_available('http://localhost:{port}/admin/'.format(
-        #     port=os.environ.get('CLA_BACKEND_PORT')))
-        # run_tests(venv_path, args['threshold_tests'])
+        run_server(env)
+        wait_until_available('http://localhost:{port}/admin/'.format(
+            port=os.environ.get('CLA_BACKEND_PORT')))
+        run_tests(venv_path, args['threshold_tests'])
     finally:
         kill_all_background_processes()
 
