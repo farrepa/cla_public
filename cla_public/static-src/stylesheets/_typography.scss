@@ -42,3 +42,8 @@ h3 {
     @include core-16;
   }
 }
+
+small {
+  @include core-16;
+  display: inline-block;
+}
