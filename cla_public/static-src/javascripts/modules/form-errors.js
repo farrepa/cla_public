@@ -60,7 +60,7 @@
     onAjaxSuccess: function(errors) {
       if (!$.isEmptyObject(errors)) {
         this.loadErrors(errors);
-        var errorBanner = $('.alert-error:visible:first');
+        var errorBanner = $('.notice-error:visible:first');
 
         if(!errorBanner.length) {
           return;
@@ -163,7 +163,7 @@
 
     clearErrors: function() {
       $('.form-row.field-error').remove();
-      $('.alert.alert-error').remove();
+      $('.notice.notice-error').remove();
       $('.m-error').removeClass('m-error');
     }
   };

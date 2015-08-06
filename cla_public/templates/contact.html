@@ -14,7 +14,7 @@
 {% block inner_content %}
   {% block page_text %}
     {% if config.CONTACT_ONLY %}
-      {% call Element.alert() %}
+      {% call Element.notice() %}
         <p>{{ _('The full service is currently unavailable. However, you can still get in touch using the form below.') }}</p>
       {% endcall %}
     {% endif %}
@@ -99,7 +99,7 @@
   </form>
 
   {% block notice %}
-    <p class="notice">
+    <p class="divider-block">
       {% trans %}Protecting your personal data and your privacy is important to us.
       Read the full <a href="/privacy" target="_blank">Civil Legal Advice Privacy Statement</a>.{% endtrans %}
     </p>

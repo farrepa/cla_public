@@ -8,7 +8,7 @@
 @import 'phase-banner';
 @import 'typography';
 @import 'forms';
-@import 'alerts';
+@import 'notice';
 @import 'icons';
 @import 'tables';
 @import 'confirmation';
@@ -23,6 +23,7 @@
 @import 'find-legal-adviser';
 @import 'flash-messages';
 @import 'scope-diagnosis';
+@import 'divider-block';
 
 html {
   height: 100%;
@@ -100,10 +101,4 @@ hr {
   height: 2px;
   background: $grey-3;
   margin: 40px 0;
-}
-
-.get-in-touch {
-  padding-top: 30px;
-  margin-top: 40px;
-  border-top: 2px solid $grey-3;
 }

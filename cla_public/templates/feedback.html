@@ -20,7 +20,7 @@
     {{ Form.handle_errors(form) }}
 
     {% if zd_error %}
-      {% call Element.alert('error', icon='cross') %}
+      {% call Element.notice('error', icon='cross') %}
         <p>{{ zd_error }}</p>
       {% endcall %}
     {% endif %}

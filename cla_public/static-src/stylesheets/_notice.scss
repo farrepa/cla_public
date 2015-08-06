@@ -1,9 +1,56 @@
 .notice {
-  border-top: 2px solid $grey-3;
-  padding-top: 30px;
-  margin-top: 40px;
+  @mixin _style-notice($border-colour, $bg-colour) {
+    background: $bg-colour;
+    border-left: 5px solid $border-colour;
+  }
 
-  h2 {
-    margin: 0 0 20px;
+  padding: 20px;
+  margin: 25px 0;
+
+  &:focus {
+    outline: 2px solid $yellow;
+  }
+
+  h3 {
+    margin-top: 0;
+  }
+
+  .icon {
+    float: left;
+    margin: -1px 15px 0 0;
+    padding: 5px;
+    border: 2px solid $mellow-red;
+    border-radius: 50%;
+  }
+
+  .notice-content {
+    overflow: hidden;
+
+    .notice-header,
+    p {
+      margin: 10px 0 0;
+    }
+
+    .notice-header {
+      @include core-24;
+      font-weight: bold;
+      margin: 0 0 10px;
+    }
+
+    h4 {
+      margin-top: 10px;
+    }
+
+    p:first-child {
+      margin: 0;
+    }
+  }
+
+  &-info {
+    @include _style-notice($grey-2, $grey-4);
+  }
+
+  &-error {
+    @include _style-notice($mellow-red, lighten($mellow-red, 43));
   }
 }

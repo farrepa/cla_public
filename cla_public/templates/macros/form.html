@@ -353,7 +353,7 @@
       </div>
     {% endif %}
     {% if field.selected_notification %}
-      {% call Element.alert() %}
+      {% call Element.notice() %}
         {{field.selected_notification|safe}}
       {% endcall %}
     {% endif %}
@@ -427,17 +427,17 @@
 {% macro handle_errors(form) %}
   {% if form.errors %}
     {% if form.errors.timeout %}
-      {% call Element.alert('error', icon='cross') %}
+      {% call Element.notice('error', icon='cross', role='alert') %}
         {% if form.errors.timeout %}
           <p>{{ form.errors.timeout }}</p>
         {% endif %}
       {% endcall %}
     {% elif form.errors|length == 1 and form.errors.csrf_token %}
-      {% call Element.alert('error', icon='cross', title=_('Sorry, something went wrong')) %}
+      {% call Element.notice('error', icon='cross', title=_('Sorry, something went wrong'), role='alert') %}
         <p>{{ _('Please try submitting the form again.') }}</p>
       {% endcall %}
     {% else%}
-      {% call Element.alert('error', icon='cross', title=_('This form has errors')) %}
+      {% call Element.notice('error', icon='cross', title=_('This form has errors'), role='alert') %}
         {% if form['properties'] %}
           {% for property_form in form['properties'] %}
             {% if property_form.errors %}

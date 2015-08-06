@@ -16,7 +16,7 @@
     <li>{{ _('remember the notifications you’ve seen so that we don’t show them to you again') }}</li>
   </ul>
 
-  {% call Element.alert() %}
+  {% call Element.notice() %}
     <p>{{ _('GOV.UK cookies aren’t used to identify you personally.') }}</p>
   {% endcall %}
 
@@ -36,7 +36,7 @@
     <li>{{ _('what you click on while you’re visiting the site.') }}</li>
   </ul>
 
-  {% call Element.alert() %}
+  {% call Element.notice() %}
     <p>{{ _('We don’t collect or store your personal information so this information can’t be used to identify who you are. For more information visit our <a href="/privacy">Privacy policy</a>.') }}</p>
   {% endcall %}
 

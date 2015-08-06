@@ -8,18 +8,20 @@
         Alert icon (sets CSS class `icon-{icon}`)
     - title <string> (default: None)
         Alert title
+    - role <string> (default: None)
+        ARIA role
 #}
-{% macro alert(type='info', icon=None, title=None) %}
-  <div class="alert alert-{{type}}"
-    role="alert"
-    {% if title %}aria-labelledby="alert-heading-{{type}}"{% endif %}
+{% macro notice(type='info', icon=None, title=None, role=None) %}
+  <div class="notice notice-{{type}}"
+    {% if role %}role="{{ role }}"{% endif %}
+    {% if title %}aria-labelledby="notice-heading-{{type}}"{% endif %}
   >
     {% if icon %}
       <span class="icon icon-{{icon}}" aria-hidden="true"></span>
     {% endif %}
-    <div class="alert-message">
+    <div class="notice-content">
       {% if title %}
-        <h3 class="alert-header" id="alert-heading-{{type}}">{{ _(title) }}</h3>
+        <h3 class="notice-header" id="notice-heading-{{type}}">{{ _(title) }}</h3>
       {% endif %}
       {{ caller() }}
     </div>
@@ -31,7 +33,7 @@
   'get in touch' link to contact page
 #}
 {% macro get_in_touch_link() %}
-  <p class="get-in-touch">
+  <p class="divider-block">
     {{ _('If you’re having trouble completing this form') }},
     <a href="{{ url_for('base.reasons_for_contacting') }}" id="callback-link">{{ _('get in touch') }}</a>.
   </p>
@@ -41,7 +43,7 @@
   Prompt to complete the satisfaction survey on gov.uk
 #}
 {%  macro satisfaction_survey_prompt() %}
-  {% call alert(title=_('What do you think about this service?')) %}
+  {% call notice(title=_('What do you think about this service?')) %}
     <p>
       {% trans %}Your feedback will improve this service.
       Please <a href="https://www.gov.uk/done/check-if-civil-legal-advice-can-help-you">send us your thoughts</a>.{% endtrans %}
