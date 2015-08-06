@@ -28,7 +28,7 @@
         $('html, body').animate({
           scrollTop: $target.offset().top - 20
         }, 300, function() {
-          $target.find('input:first').focus();
+          $target.attr('tabindex', -1).focus();
         });
       });
     },
@@ -68,8 +68,9 @@
 
         $('html, body').animate({
           scrollTop: errorBanner.offset().top - 20
-        }, 300);
-        errorBanner.attr({'tabindex': -1}).focus();
+        }, 300, function() {
+          errorBanner.attr({'tabindex': -1}).focus();
+        });
       } else {
         this.$form.off('submit');
         this.$form.submit();
