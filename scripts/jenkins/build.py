@@ -201,6 +201,8 @@ def run_tests(venv_path, jenkins_build_path, browser, skip_tests=''):
         ),
         background=True)
     wait_until_available('http://localhost:{port}/'.format(port=public_port))
+    run('echo {port}'.format(port=os.environ['CLA_PUBLIC_PORT']))
+    run('sleep 10000')
     run('./nightwatch --env {browser} -c tests/nightwatch/jenkins.json -M'.format(browser=browser))
 
     # nightwatch fails to clean up these process
