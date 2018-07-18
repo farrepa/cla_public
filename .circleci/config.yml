@@ -109,10 +109,16 @@ jobs:
             source env-ci/bin/activate
             python manage.py runserver
       - run:
+          name: Wait for service to be up
+          command: dockerize -wait tcp://localhost:5000
+      - run:
           name: Run browser tests
+          command: ./nightwatch -c tests/nightwatch/ci.json --env chrome
+      - run:
+          name: Run integration tests
           command: |
-            dockerize -wait tcp://localhost:5000
-            ./nightwatch -c tests/nightwatch/ci.json --env chrome
+            source env-ci/bin/activate
+            python manage.py test -i
       - store_artifacts:
           path: tests/reports
 
