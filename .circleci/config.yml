@@ -39,7 +39,7 @@ jobs:
           name: Setup Python environment
           command: |
             pip install virtualenv
-            virtualenv env
+            virtualenv env-ci
 
       - restore_cache:
           keys:
@@ -47,7 +47,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            source env/bin/activate
+            source env-ci/bin/activate
             pip install --requirement requirements.txt --requirement requirements/test.txt
       - save_cache:
           key: pip-v2-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/test.txt" }}
@@ -57,7 +57,7 @@ jobs:
       - run:
           name: Run unit tests
           command: |
-            source env/bin/activate
+            source env-ci/bin/activate
             python manage.py test
 
   browser-test:
@@ -69,7 +69,7 @@ jobs:
           name: Setup Python environment
           command: |
             pip install virtualenv
-            virtualenv env
+            virtualenv env-ci
 
       - restore_cache:
           keys:
@@ -77,7 +77,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            source env/bin/activate
+            source env-ci/bin/activate
             pip install --requirement requirements.txt --requirement requirements/test.txt
       - save_cache:
           key: pip-v2-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/test.txt" }}
@@ -106,7 +106,7 @@ jobs:
           name: Start server
           background: true
           command: |
-            source env/bin/activate
+            source env-ci/bin/activate
             python manage.py runserver
       - run:
           name: Run browser tests
