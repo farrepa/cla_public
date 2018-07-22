@@ -1,43 +1,27 @@
 {
-  "src_folders" : "tests/nightwatch/specs",
-  "output_folder" : "tests/reports/nightwatch",
-  "custom_assertions_path" : "tests/nightwatch/custom_assertions",
-  "custom_commands_path" : "tests/nightwatch/commands",
+  "src_folders": "tests/nightwatch/specs",
+  "output_folder": "tests/reports/nightwatch",
+  "custom_assertions_path": "tests/nightwatch/custom_assertions",
+  "custom_commands_path": "tests/nightwatch/commands",
+  "globals_path": "tests/nightwatch/globals/local.js",
 
-  "selenium" : {
-    "start_process" : true,
-    "server_path" : "node_modules/selenium-standalone/.selenium/selenium-server/2.45.0-server.jar"
+  "selenium": {
+    "start_process": false
   },
 
-  "test_settings" : {
-    "default" : {
-      "launch_url" : "http://localhost:5000",
-      "silent": true,
-      "desiredCapabilities": {
-        "browserName": "phantomjs",
-        "javascriptEnabled" : true,
-        "acceptSslCerts" : true,
-        "phantomjs.binary.path" : "node_modules/phantomjs/bin/phantomjs"
-      }
-    },
+  "test_settings": {
+    "default": {
+      "launch_url": "http://localhost:5000",
+      "selenium_port": 9515,
+      "selenium_host": "localhost",
+      "default_path_prefix": "",
 
-    "firefox" : {
-      "screenshots" : {
-        "enabled" : true,
-        "path" : "tests/reports/nightwatch/screenshots"
-      },
       "desiredCapabilities": {
-        "browserName": "firefox"
-      }
-    },
-
-    "chrome" : {
-      "screenshots" : {
-        "enabled" : true,
-        "path" : "tests/reports/nightwatch/screenshots"
-      },
-      "desiredCapabilities": {
-        "browserName": "chrome"
+        "browserName": "chrome",
+        "chromeOptions": {
+          "args": ["--no-sandbox"]
+        },
+        "acceptSslCerts": true
       }
     }
   }
