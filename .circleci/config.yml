@@ -68,7 +68,8 @@ jobs:
       - run:
           name: Login to container registry
           command: |
-            sudo apt-get -y -qq install awscli
+            pip install awscli --upgrade --user
+            export PATH=~/.local/bin:$PATH
             login="$(aws ecr get-login --region eu-west-1)"
             ${login}
       - run:
