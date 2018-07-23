@@ -64,6 +64,13 @@ jobs:
     docker:
       - image: circleci/python:2.7-node-browsers
     steps:
+    - checkout
+    - run:
+        name: Login to container registry
+        command: |
+          apk add --no-cache --no-progress --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing/ aws-cli
+          login="$(aws ecr get-login --region eu-west-1 --no-include-email)"
+          ${login}
       - run:
           name: Install Docker Compose
           command: |
@@ -71,7 +78,11 @@ jobs:
             chmod +x ~/docker-compose
             sudo mv ~/docker-compose /usr/local/bin/docker-compose
       - setup_remote_docker
-      - checkout
+      - run:
+          name: Start container and verify it's working
+          command: |
+            set -x
+            docker-compose up -d
       - run:
           name: Setup Python environment
           command: |
@@ -127,8 +138,8 @@ workflows:
   build_and_test:
     jobs:
       - test
+      - build
       - browser-test
-      - build:
           requires:
+            - build
             - test
-            - browser-test

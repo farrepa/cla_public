@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  
+  clabackend:
+    build: ${ECR_ENDPOINT}/cla-backend:${CIRCLE_SHA1}
+    ports:
+      - "8000:80"
+    environment:
+      ENV: local
+      DEBUG: "True"
+      SECRET_KEY: CHANGE_ME
+      DB_NAME: cla_backend
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_HOST: db
+      DB_PORT: 5432
+      BACKEND_ENABLED: "True"
+      LOAD_TEST_DATA: "True"
+      ADMIN_PASSWORD: cla_admin
+      ALLOWED_HOSTS: "*"
+    depends_on:
+      - db
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: cla_backend
