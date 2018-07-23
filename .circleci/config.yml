@@ -112,7 +112,7 @@ jobs:
           name: Run browser tests
           command: |
             dockerize -wait tcp://localhost:5000
-            ./nightwatch -c tests/nightwatch/ci.json --env chrome
+            ./nightwatch -c tests/nightwatch/local.json 
       - store_artifacts:
           path: tests/reports
 
