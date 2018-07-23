@@ -68,8 +68,8 @@ jobs:
       - run:
           name: Login to container registry
           command: |
-            apk add --no-cache --no-progress --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing/ aws-cli
-            login="$(aws ecr get-login --region eu-west-1 --no-include-email)"
+            sudo apt-get -y -qq install awscli
+            login="$(aws ecr get-login --region eu-west-1)"
             ${login}
       - run:
           name: Install Docker Compose
