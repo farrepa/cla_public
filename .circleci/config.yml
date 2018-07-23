@@ -137,9 +137,10 @@ workflows:
   version: 2
   build_and_test:
     jobs:
-      - test
-      - build
-      - browser-test:
-          requires:
-            - build
-            - test
+      - browser-test
+      # - test
+      # - build
+      # - browser-test:
+      #     requires:
+      #       - build
+      #       - test
