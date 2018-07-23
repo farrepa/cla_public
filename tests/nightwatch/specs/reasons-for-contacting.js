@@ -1,36 +1,35 @@
 function reasonsForContactingForm(client) {
   client
     .startService()
-    .click('#callback-link', function() {
+    .click("#callback-link", function() {
       console.log('     • "Get in touch" link clicked');
     })
-    .waitForElementVisible('.reasons-for-contacting-form', 3000,
-      '  - "Reasons for contacting" form exists');
+    .waitForElementVisible(
+      ".reasons-for-contacting-form",
+      3000,
+      '  - "Reasons for contacting" form exists'
+    );
   return client;
 }
 
 module.exports = {
-  '@disabled': true,
-  'Reasons for contacting do not need to be filled in': function(client) {
+  "@disabled": false,
+  "Reasons for contacting do not need to be filled in": function(client) {
     reasonsForContactingForm(client);
-    client
-      .conditionalFormSubmit(true)
-      .end()
-    ;
+    client.conditionalFormSubmit(true).end();
   },
 
-  'Reasons for contacting with one reason': function(client) {
+  "Reasons for contacting with one reason": function(client) {
     reasonsForContactingForm(client);
     client
       .click('input[value="PREFER_SPEAKING"]', function() {
         console.log('     • "I’d prefer to speak to someone" clicked');
       })
       .conditionalFormSubmit(true)
-      .end()
-    ;
+      .end();
   },
 
-  'Reasons for contacting with more details': function(client) {
+  "Reasons for contacting with more details": function(client) {
     reasonsForContactingForm(client);
     client
       .click('input[value="OTHER"]', function() {
@@ -40,7 +39,6 @@ module.exports = {
         console.log('     • "I’d prefer to speak to someone" clicked');
       })
       .conditionalFormSubmit(true)
-      .end()
-    ;
+      .end();
   }
 };

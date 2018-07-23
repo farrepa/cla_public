@@ -1,47 +1,52 @@
-'use strict';
+"use strict";
 
-var constants = require('../modules/constants');
+var constants = require("../modules/constants");
 
 module.exports = {
-  'Start page': function(client) {
+  "Start page": function(client) {
     client.startService();
   },
 
-  '@disabled': true,
-  'Scope diagnosis': function(client) {
+  "@disabled": false,
+  "Scope diagnosis": function(client) {
     client.scopeDiagnosis(constants.SCOPE_PATHS.clinnegFaceToFace);
   },
 
-  'Face-to-face page': function(client) {
+  "Face-to-face page": function(client) {
     client
-      .ensureCorrectPage('.legal-adviser-search', '/scope/refer/legal-adviser', {
-        'h1': 'A legal adviser may be able to help you'
-      })
-     .checkFlashMessage()
-    ;
+      .ensureCorrectPage(
+        ".legal-adviser-search",
+        "/scope/refer/legal-adviser",
+        {
+          h1: "A legal adviser may be able to help you"
+        }
+      )
+      .checkFlashMessage();
   },
 
-  'Find legal adviser search': function(client) {
+  "Find legal adviser search": function(client) {
     client
-      .setValue('input[name="postcode"]', 'w22dd', function() {
-        console.log('     • Enter postcode `w22dd`');
+      .setValue('input[name="postcode"]', "w22dd", function() {
+        console.log("     • Enter postcode `w22dd`");
       })
       .conditionalFormSubmit(true)
-      .assert.urlContains('/scope/refer/legal-adviser',
-        '    - Page is ready'
+      .assert.urlContains("/scope/refer/legal-adviser", "    - Page is ready")
+      .waitForElementVisible(
+        ".search-results-container",
+        5000,
+        "    - Search results are shown"
       )
-      .waitForElementVisible('.search-results-container', 5000,
-        '    - Search results are shown'
+      .assert.containsText(
+        ".results-summary",
+        "results around",
+        "    - Results summary has location"
       )
-      .assert.containsText('.results-summary', 'results around',
-        '    - Results summary has location'
-      )
-      .assert.containsText('.results-filter', constants.SCOPE_PATHS.clinnegFaceToFace.title.toUpperCase(),
-        '    - Filter contains category name'
-      )
-    ;
+      .assert.containsText(
+        ".results-filter",
+        constants.SCOPE_PATHS.clinnegFaceToFace.title.toUpperCase(),
+        "    - Filter contains category name"
+      );
 
     client.end();
   }
-
 };

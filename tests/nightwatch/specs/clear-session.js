@@ -1,50 +1,52 @@
-'use strict';
+"use strict";
 
-var common = require('../modules/common-functions');
-var constants = require('../modules/constants');
+var common = require("../modules/common-functions");
+var constants = require("../modules/constants");
 
 module.exports = {
-  'Start page': function(client) {
+  "Start page": function(client) {
     client.startService();
   },
 
-  '@disabled': true,
-  'Scope diagnosis': function(client) {
+  "@disabled": false,
+  "Scope diagnosis": function(client) {
     client.scopeDiagnosis(constants.SCOPE_PATHS.debtInScope);
   },
 
-  'Interstitial page': function(client) {
+  "Interstitial page": function(client) {
     client.interstitialPage();
   },
 
-  'About you': function(client) {
+  "About you": function(client) {
     client.aboutSetAllToNo(true);
   },
 
-  'Start page again': function(client) {
+  "Start page again": function(client) {
     // not using common.startPage because that clears cookies which would negate this test
     client
       .init()
       .maximizeWindow()
-      .ensureCorrectPage('body', '/')
-      .click('a#start', function() {
-        console.log('     ⟡ Start button clicked');
-      })
-    ;
+      .ensureCorrectPage("body", "/")
+      .click("a#start", function() {
+        console.log("     ⟡ Start button clicked");
+      });
   },
 
-  'Scope diagnosis again': function(client) {
+  "Scope diagnosis again": function(client) {
     client.scopeDiagnosis(constants.SCOPE_PATHS.debtInScope);
   },
 
-  'Interstitial page again': function(client) {
+  "Interstitial page again": function(client) {
     client.interstitialPage();
   },
 
-  'Check option is not selected': function(client) {
-    common.checkAttributeIsNotPresent(client, 'input[name="have_partner"]', 'checked');
+  "Check option is not selected": function(client) {
+    common.checkAttributeIsNotPresent(
+      client,
+      'input[name="have_partner"]',
+      "checked"
+    );
 
     client.end();
   }
-
 };
