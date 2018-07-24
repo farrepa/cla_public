@@ -63,6 +63,10 @@ jobs:
   browser-test:
     docker:
       - image: circleci/python:2.7-node-browsers
+        environment:
+          BACKEND_BASE_URI: localhost
+          BACKEND_ENABLED: true
+          DJANGO_SETTINGS_MODULE: cla_public.settings.jenkins
     steps:
       - checkout
       - setup_remote_docker:
