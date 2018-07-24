@@ -9,7 +9,7 @@ services:
     environment:
       ENV: local
       DEBUG: "True"
-      SECRET_KEY: CHANGE_ME
+      SECRET_KEY: SECRET
       DB_NAME: cla_backend
       DB_USER: postgres
       DB_PASSWORD: postgres

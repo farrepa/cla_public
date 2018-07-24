@@ -22,7 +22,8 @@
           "args": ["--no-sandbox"]
         },
         "acceptSslCerts": true
-      }
+      },
+      "filter": "tests/nightwatch/specs/scope-diagnosis.js"
     }
   }
 }
