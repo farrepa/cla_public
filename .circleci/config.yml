@@ -65,11 +65,12 @@ jobs:
       - image: circleci/python:2.7-node-browsers
     steps:
       - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
       - run:
           name: Login to container registry
           command: |
             pip install awscli --upgrade --user
-            export PATH=~/.local/bin:$PATH
             login="$(~/.local/bin/aws ecr get-login --region eu-west-1 --no-include-email)"
             ${login}
       - run:
