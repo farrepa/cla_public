@@ -87,7 +87,7 @@ jobs:
           name: Start container and verify it's working
           command: |
             set -x
-            docker-compose run clabackend
+            docker-compose run -d clabackend 
       - run:
           name: Setup Python environment
           command: |
