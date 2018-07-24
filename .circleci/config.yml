@@ -70,7 +70,8 @@ jobs:
           command: |
             pip install awscli --upgrade --user
             export PATH=~/.local/bin:$PATH
-            aws ecr get-login --region eu-west-1 --no-include-email
+            login="$(aws ecr get-login --region eu-west-1 --no-include-email)"
+            ${login}
       - run:
           name: Install Docker Compose
           command: |
