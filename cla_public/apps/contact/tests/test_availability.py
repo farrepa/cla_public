@@ -4,6 +4,7 @@ import logging
 from mock import Mock
 import unittest
 import mock
+import pytz
 
 from wtforms import Form
 from wtforms.validators import InputRequired, ValidationError
@@ -246,10 +247,16 @@ class TestTimeChoiceField(unittest.TestCase):
 
     def setUp(self):
         self.form = Form()
-        with override_current_time(datetime.datetime(2015, 2, 11, 23, 3)):
-            field = TimeChoiceField(choices_callback=OPERATOR_HOURS.time_slots, validators=[InputRequired()])
+        with override_current_time(datetime.datetime(2018, 7, 26, 9, 30, tzinfo=pytz.timezone('Europe/London'))):
+            field = TimeChoiceField(OPERATOR_HOURS.today_slots, validators=[AvailableSlot(DAY_TODAY)])
             self.field = field.bind(self.form, 'a')
             self.field.process(None)
+
+    def test_next_available_slot_is_in_two_hours(self):
+        # 26 July 2018 is in daylight savings time in Europe/London
+        # The given "current time" is 9:30 in UTC, which is 10:30 in London, meaning the next available slot must be 12:30
+        self.assertNotIn(('1200', '12:00 PM'), self.field.choices)
+        self.assertIn(('1230', '12:30 PM'), self.field.choices)
 
     def test_process_valid(self):
         # one of the options should be selected
